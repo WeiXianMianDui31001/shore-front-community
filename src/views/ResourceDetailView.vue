@@ -1,73 +1,86 @@
 <template>
-  <div class="resource-detail-page">
-    <button class="back-btn" @click="router.back()">&#8592; 返回</button>
+  <div class="page-container resource-detail-page">
+    <button class="btn btn-ghost btn-sm" style="margin-bottom:var(--space-4)" @click="router.back()">
+      <span style="margin-right:4px">&#8592;</span> 返回
+    </button>
 
     <div v-if="loading" class="loading">加载中...</div>
 
-    <div v-else-if="resource" class="resource-detail">
+    <div v-else-if="resource" class="card" style="overflow:hidden">
       <div class="detail-header">
+        <span class="badge badge-info">{{ resource.category }}</span>
         <h1 class="detail-title">{{ resource.title }}</h1>
         <div class="detail-meta">
-          <span class="category-tag">{{ resource.category }}</span>
-          <span class="meta-item">上传者：{{ resource.uploaderNickname || '用户' + resource.uploaderId }}</span>
-          <span class="meta-item">{{ formatTime(resource.createdAt) }}</span>
+          <div class="meta-item">
+            <span class="meta-label">上传者</span>
+            <span class="meta-value">{{ resource.uploaderNickname || '用户' + resource.uploaderId }}</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-item">
+            <span class="meta-label">上传时间</span>
+            <span class="meta-value">{{ formatTime(resource.createdAt) }}</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-item">
+            <span class="status-dot" :class="statusClass(resource.status)"></span>
+            <span class="meta-value">{{ statusText(resource.status) }}</span>
+          </div>
         </div>
       </div>
 
       <div class="detail-body">
-        <div class="info-section">
-          <h3 class="section-title">资源简介</h3>
+        <div class="info-block">
+          <h3 class="block-title">资源简介</h3>
           <p class="description">{{ resource.description || '暂无简介' }}</p>
         </div>
 
-        <div class="info-section">
-          <h3 class="section-title">文件信息</h3>
-          <div class="file-info-grid">
-            <div class="file-info-item">
-              <span class="file-info-label">文件名</span>
-              <span class="file-info-value">{{ resource.fileName }}</span>
+        <div class="info-block">
+          <h3 class="block-title">文件信息</h3>
+          <div class="info-grid">
+            <div class="info-cell">
+              <span class="cell-label">文件名</span>
+              <span class="cell-value">{{ resource.fileName }}</span>
             </div>
-            <div class="file-info-item">
-              <span class="file-info-label">大小</span>
-              <span class="file-info-value">{{ formatFileSize(resource.fileSize) }}</span>
+            <div class="info-cell">
+              <span class="cell-label">文件大小</span>
+              <span class="cell-value">{{ formatFileSize(resource.fileSize) }}</span>
             </div>
-            <div class="file-info-item">
-              <span class="file-info-label">下载次数</span>
-              <span class="file-info-value">{{ resource.downloadCount || 0 }}</span>
+            <div class="info-cell">
+              <span class="cell-label">下载次数</span>
+              <span class="cell-value">{{ resource.downloadCount || 0 }} 次</span>
             </div>
-            <div class="file-info-item">
-              <span class="file-info-label">状态</span>
-              <span class="file-info-value">{{ statusText(resource.status) }}</span>
+            <div class="info-cell">
+              <span class="cell-label">下载消耗</span>
+              <span class="cell-value" style="color:var(--warning)">{{ resource.pointsCost || 0 }} 积分</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="download-section">
-        <div class="download-info">
-          <span class="cost-label">下载消耗：</span>
-          <span class="cost-value">{{ resource.pointsCost || 0 }} 积分</span>
-          <span class="balance-label">（我的余额：{{ myPoints }} 积分）</span>
+      <div class="detail-footer">
+        <div class="points-bar">
+          <span style="font-size:14px;color:var(--text-secondary)">我的积分余额</span>
+          <span class="points-value" :class="{ insufficient: resource.pointsCost > myPoints }">{{ myPoints }}</span>
         </div>
-        <div class="action-buttons">
-          <button class="collect-btn" :class="{ active: resource.collected }" @click="toggleCollect">
-            <span>&#9733;</span> {{ resource.collected ? '已收藏' : '收藏' }}
+        <div class="action-group">
+          <button class="btn btn-secondary" :class="{ active: resource.collected }" @click="toggleCollect">
+            <span style="margin-right:4px">&#9733;</span> {{ resource.collected ? '已收藏' : '收藏' }}
           </button>
           <button
-            class="download-btn"
+            class="btn btn-primary btn-lg"
             :disabled="resource.status !== 1 || downloading || resource.pointsCost > myPoints"
             @click="doDownload"
           >
-          <span v-if="downloading">处理中...</span>
-          <span v-else-if="resource.status !== 1">资源暂不可下载</span>
-          <span v-else-if="resource.pointsCost > myPoints">积分不足</span>
-          <span v-else>&#128229; 立即下载</span>
-        </button>
+            <span v-if="downloading">处理中...</span>
+            <span v-else-if="resource.status !== 1">资源暂不可下载</span>
+            <span v-else-if="resource.pointsCost > myPoints">积分不足</span>
+            <span v-else><span style="margin-right:4px">&#128229;</span> 立即下载</span>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div v-else class="empty">资源不存在</div>
+    <div v-else class="empty">资源不存在</div>
   </div>
 </template>
 
@@ -103,6 +116,13 @@ function statusText(status) {
   if (status === 1) return '已上架'
   if (status === 2) return '已拒绝'
   return '未知'
+}
+
+function statusClass(status) {
+  if (status === 0) return 'pending'
+  if (status === 1) return 'approved'
+  if (status === 2) return 'rejected'
+  return ''
 }
 
 async function loadResource() {
@@ -149,7 +169,6 @@ async function doDownload() {
     const { fileUrl } = res.data
     if (fileUrl) {
       window.open(fileUrl, '_blank')
-      // 重新加载资源详情，确保下载次数与积分显示最新值
       await loadResource()
       await loadMyPoints()
     }
@@ -167,168 +186,122 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.resource-detail-page {
-  padding-bottom: 40px;
-}
-.back-btn {
-  margin-bottom: 16px;
-  padding: 8px 16px;
-  border: none;
-  background: transparent;
-  color: #1a3a5c;
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: 500;
-}
-.back-btn:hover {
-  text-decoration: underline;
-}
-
-.resource-detail {
-  background: #fff;
-  border-radius: 20px;
-  border: 1px solid #ebe8e0;
-  overflow: hidden;
-}
-
 .detail-header {
-  padding: 32px;
-  border-bottom: 1px solid #f0ece4;
+  padding: var(--space-8);
+  border-bottom: 1px solid var(--border);
 }
 .detail-title {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 14px;
+  color: var(--text);
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+  margin: var(--space-3) 0 var(--space-4);
 }
 .detail-meta {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-3);
   flex-wrap: wrap;
   font-size: 14px;
-  color: #888;
 }
-.category-tag {
-  font-size: 13px;
-  padding: 4px 12px;
-  background: #e3f2fd;
-  color: #1565c0;
-  border-radius: 8px;
+.meta-label {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-right: 4px;
+}
+.meta-value {
+  color: var(--text-secondary);
   font-weight: 500;
 }
+.meta-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+  margin-right: 6px;
+}
+.status-dot.pending { background: var(--warning); }
+.status-dot.approved { background: var(--success); }
+.status-dot.rejected { background: var(--danger); }
 
 .detail-body {
-  padding: 32px;
+  padding: var(--space-8);
 }
-.info-section {
-  margin-bottom: 28px;
+.info-block {
+  margin-bottom: var(--space-8);
 }
-.info-section:last-child {
+.info-block:last-child {
   margin-bottom: 0;
 }
-.section-title {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 18px;
-  color: #1a3a5c;
-  margin-bottom: 12px;
+.block-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-3);
 }
 .description {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.8;
-  color: #444;
+  color: var(--text-secondary);
 }
-.file-info-grid {
+.info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  gap: var(--space-3);
 }
-.file-info-item {
+.info-cell {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 14px;
-  background: #faf9f7;
-  border-radius: 12px;
+  gap: 6px;
+  padding: var(--space-4);
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
 }
-.file-info-label {
+.cell-label {
   font-size: 12px;
-  color: #888;
-}
-.file-info-value {
-  font-size: 14px;
+  color: var(--text-muted);
   font-weight: 500;
-  color: #333;
+}
+.cell-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
 }
 
-.download-section {
-  padding: 24px 32px;
-  background: #faf9f7;
-  border-top: 1px solid #f0ece4;
+.detail-footer {
+  padding: var(--space-5) var(--space-8);
+  background: var(--bg);
+  border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--space-4);
 }
-.download-info {
+.points-bar {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 15px;
+  gap: var(--space-2);
 }
-.cost-label {
-  color: #555;
-}
-.cost-value {
+.points-value {
+  font-size: 18px;
   font-weight: 700;
-  color: #e65100;
+  color: var(--text);
 }
-.balance-label {
-  color: #888;
-  font-size: 13px;
+.points-value.insufficient {
+  color: var(--danger);
 }
-.action-buttons {
+.action-group {
   display: flex;
-  gap: 12px;
-}
-.collect-btn {
-  padding: 12px 24px;
-  border: 1.5px solid #e0ddd5;
-  background: #fff;
-  color: #555;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-}
-.collect-btn.active {
-  background: #fff8e1;
-  border-color: #e65100;
-  color: #e65100;
-}
-.download-btn {
-  padding: 12px 32px;
-  border: none;
-  background: #1a3a5c;
-  color: #fff;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-}
-.download-btn:hover:not(:disabled) {
-  background: #0f2540;
-}
-.download-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.loading, .empty {
-  text-align: center;
-  padding: 60px 0;
-  color: #999;
+  gap: var(--space-3);
 }
 </style>

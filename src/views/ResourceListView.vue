@@ -1,5 +1,5 @@
 <template>
-  <div class="resource-list-page">
+  <div class="page-container">
     <div class="page-header">
       <h2>资源大厅</h2>
       <p class="page-desc">考研资料、求职简历、面试经验，应有尽有</p>
@@ -8,33 +8,29 @@
     <div class="toolbar">
       <div class="search-box">
         <input v-model="searchKeyword" placeholder="搜索资源标题..." @keyup.enter="doSearch" />
-        <button class="search-btn" @click="doSearch">搜索</button>
+        <button class="btn btn-primary btn-sm" @click="doSearch">搜索</button>
       </div>
-      <div class="category-filter">
+      <div class="category-bar">
         <button :class="{ active: category === '' }" @click="category = ''; loadResources()">全部</button>
         <button v-for="cat in categories" :key="cat" :class="{ active: category === cat }" @click="category = cat; loadResources()">
           {{ cat }}
         </button>
       </div>
-      <router-link to="/resources/upload" class="upload-btn-primary">+ 上传资源</router-link>
+      <router-link to="/resources/upload" class="btn btn-primary">+ 上传资源</router-link>
     </div>
 
     <div v-if="loading" class="loading">加载中...</div>
 
-    <div v-else class="resources">
-      <div v-for="res in resources" :key="res.id" class="resource-card" @click="goDetail(res.id)">
+    <div v-else class="resource-list">
+      <div v-for="res in resources" :key="res.id" class="resource-card card card-hover card-clickable" @click="goDetail(res.id)">
         <div class="resource-main">
           <h3 class="resource-title">{{ res.title }}</h3>
           <p class="resource-desc">{{ res.description || '暂无简介' }}</p>
-          <div class="resource-meta">
-            <span class="category-tag">{{ res.category }}</span>
-          </div>
+          <span class="tag">{{ res.category }}</span>
         </div>
         <div class="resource-side">
-          <div class="uploader">
-            <span class="uploader-name">{{ res.uploaderNickname || '用户' + res.uploaderId }}</span>
-          </div>
-          <div class="stats">
+          <span class="uploader-name">{{ res.uploaderNickname || '用户' + res.uploaderId }}</span>
+          <div class="resource-stats">
             <span class="stat">
               <span class="stat-icon">&#128229;</span> {{ res.downloadCount || 0 }}
             </span>
@@ -42,7 +38,7 @@
               <span class="stat-icon">&#128176;</span> {{ res.pointsCost || 0 }} 积分
             </span>
           </div>
-          <span class="status-badge" :class="statusClass(res.status)">{{ statusText(res.status) }}</span>
+          <span class="badge" :class="statusBadgeClass(res.status)">{{ statusText(res.status) }}</span>
         </div>
       </div>
     </div>
@@ -82,20 +78,17 @@ function statusText(status) {
   return '未知'
 }
 
-function statusClass(status) {
-  if (status === 0) return 'status-pending'
-  if (status === 1) return 'status-approved'
-  if (status === 2) return 'status-rejected'
-  return ''
+function statusBadgeClass(status) {
+  if (status === 0) return 'badge-warning'
+  if (status === 1) return 'badge-success'
+  if (status === 2) return 'badge-danger'
+  return 'badge-neutral'
 }
 
 async function loadResources() {
   loading.value = true
   try {
-    const params = {
-      page: page.value,
-      size: size.value
-    }
+    const params = { page: page.value, size: size.value }
     if (searchKeyword.value) params.keyword = searchKeyword.value
     if (category.value) params.category = category.value
     const res = await listResources(params)
@@ -125,199 +118,93 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.page-header {
-  margin-bottom: 24px;
-}
-.page-header h2 {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 28px;
-  color: #1a3a5c;
-}
-.page-desc {
-  color: #888;
-  font-size: 14px;
-  margin-top: 4px;
-}
-
-.toolbar {
+.category-bar {
   display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.search-box {
-  display: flex;
-  flex: 1;
-  min-width: 260px;
-  gap: 8px;
-}
-.search-box input {
-  flex: 1;
-  padding: 10px 14px;
-  border: 1.5px solid #e0ddd5;
-  border-radius: 10px;
-  font-size: 14px;
-  outline: none;
-  background: #fff;
-}
-.search-box input:focus {
-  border-color: #c9a96e;
-}
-.search-btn {
-  padding: 10px 20px;
-  border: none;
-  background: #1a3a5c;
-  color: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.category-filter {
-  display: flex;
-  gap: 8px;
+  gap: var(--space-2);
   flex-wrap: wrap;
 }
-.category-filter button {
-  padding: 8px 14px;
-  border: 1.5px solid #e0ddd5;
-  background: #fff;
-  border-radius: 10px;
+
+.category-bar button {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-full);
   cursor: pointer;
   font-size: 13px;
-  color: #555;
-  transition: all 0.2s;
-}
-.category-filter button.active {
-  background: #1a3a5c;
-  color: #fff;
-  border-color: #1a3a5c;
+  color: var(--text-secondary);
+  transition: all 0.15s;
 }
 
-.upload-btn-primary {
-  padding: 10px 20px;
-  background: #c9a96e;
-  color: #fff;
-  border-radius: 10px;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-}
-.upload-btn-primary:hover {
-  background: #b8985a;
+.category-bar button:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
 }
 
-.resources {
+.category-bar button.active {
+  background: var(--primary);
+  color: var(--text-on-primary);
+  border-color: var(--primary);
+}
+
+.resource-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-3);
 }
+
 .resource-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 24px;
-  border: 1px solid #ebe8e0;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
   display: flex;
   justify-content: space-between;
-  gap: 20px;
-}
-.resource-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(26, 58, 92, 0.08);
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-6);
 }
 
 .resource-main {
   flex: 1;
   min-width: 0;
 }
+
 .resource-title {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 8px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--space-2);
 }
+
 .resource-desc {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.5;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
-.resource-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.category-tag {
-  font-size: 12px;
-  padding: 4px 10px;
-  background: #e3f2fd;
-  color: #1565c0;
-  border-radius: 8px;
-  font-weight: 500;
-}
+
 .resource-side {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
+  gap: var(--space-2);
   min-width: 120px;
 }
+
 .uploader-name {
   font-size: 13px;
-  color: #888;
+  color: var(--text-muted);
 }
-.stats {
+
+.resource-stats {
   display: flex;
-  gap: 12px;
+  gap: var(--space-3);
   font-size: 13px;
-  color: #666;
+  color: var(--text-secondary);
 }
+
 .stat {
   display: flex;
   align-items: center;
   gap: 4px;
 }
+
 .stat-icon {
   font-size: 14px;
-}
-.status-badge {
-  font-size: 12px;
-  padding: 3px 10px;
-  border-radius: 8px;
-  font-weight: 500;
-}
-.status-pending { background: #fff3e0; color: #e65100; }
-.status-approved { background: #e8f5e9; color: #2e7d32; }
-.status-rejected { background: #fce4ec; color: #c2185b; }
-
-.loading, .empty {
-  text-align: center;
-  padding: 60px 0;
-  color: #999;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  margin-top: 32px;
-}
-.pagination button {
-  padding: 8px 18px;
-  border: 1px solid #e0ddd5;
-  background: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-}
-.pagination button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
 }
 </style>

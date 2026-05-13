@@ -1,9 +1,10 @@
 <template>
-  <div class="upload-page">
-    <button class="back-btn" @click="router.back()">&#8592; 返回</button>
-    <h2 class="page-title">上传资源</h2>
+  <div class="page-container upload-page">
+    <div class="page-header">
+      <h2>上传资源</h2>
+    </div>
 
-    <div class="form">
+    <div class="card">
       <div class="field">
         <label>标题 *</label>
         <input v-model="form.title" placeholder="给资源起个清晰的标题" maxlength="120" />
@@ -11,7 +12,7 @@
 
       <div class="field">
         <label>分类 *</label>
-        <div class="category-options">
+        <div class="category-pills">
           <button v-for="cat in categories" :key="cat" :class="{ active: form.category === cat }" @click="form.category = cat">
             {{ cat }}
           </button>
@@ -25,38 +26,36 @@
 
       <div class="field">
         <label>文件 *</label>
-        <div class="file-upload-area" v-if="!selectedFile">
+        <div class="upload-zone" v-if="!selectedFile" @click="fileInput?.click()">
           <input type="file" @change="handleFileSelect" ref="fileInput" class="file-input" />
-          <button class="upload-trigger" @click="fileInput?.click()">
-            <span class="upload-icon">&#128193;</span>
-            <span>点击选择文件</span>
-            <span class="upload-hint">支持 PDF、Word、PPT、ZIP 等格式</span>
-          </button>
+          <span class="upload-icon">&#128193;</span>
+          <span class="upload-text">点击选择文件</span>
+          <span class="upload-hint">支持 PDF、Word、PPT、ZIP 等格式</span>
         </div>
         <div v-else class="file-selected">
           <div class="file-info">
             <span class="file-name">{{ selectedFile.name }}</span>
             <span class="file-size">{{ formatFileSize(selectedFile.size) }}</span>
           </div>
-          <button class="file-remove" @click="removeFile">更换</button>
+          <button class="btn btn-secondary btn-sm" @click.stop="removeFile">更换</button>
         </div>
         <div v-if="fileUploading" class="upload-progress">上传中... {{ uploadProgress }}%</div>
       </div>
 
-      <div class="points-info">
-        <span class="points-label">下载积分定价：</span>
-        <span class="points-value">按当前规则自动计算</span>
-        <span class="points-hint">（管理员审核通过后生效）</span>
+      <div class="points-tip">
+        <span class="tip-label">下载积分定价：</span>
+        <span class="tip-value">按当前规则自动计算</span>
+        <span class="tip-hint">（管理员审核通过后生效）</span>
       </div>
 
-      <div class="actions">
-        <button class="btn-submit" @click="submit" :disabled="!canSubmit || submitting">
+      <div class="form-actions">
+        <button class="btn btn-primary btn-lg" @click="submit" :disabled="!canSubmit || submitting">
           {{ submitting ? '提交中...' : '提交审核' }}
         </button>
-        <button class="btn-cancel" @click="router.back()">取消</button>
+        <button class="btn btn-secondary" @click="router.back()">取消</button>
       </div>
 
-      <p v-if="error" class="error">{{ error }}</p>
+      <p v-if="error" class="form-error">{{ error }}</p>
     </div>
   </div>
 </template>
@@ -170,230 +169,144 @@ getCategories().then(res => {
 <style scoped>
 .upload-page {
   max-width: 720px;
-  margin: 0 auto;
 }
-.back-btn {
-  margin-bottom: 16px;
+
+.card {
+  padding: var(--space-8);
+}
+
+.category-pills {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.category-pills button {
   padding: 8px 16px;
-  border: none;
-  background: transparent;
-  color: #1a3a5c;
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: 500;
-}
-.back-btn:hover {
-  text-decoration: underline;
-}
-.page-title {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 26px;
-  color: #1a3a5c;
-  margin-bottom: 24px;
-}
-
-.form {
-  background: #fff;
-  border-radius: 20px;
-  padding: 32px;
-  border: 1px solid #ebe8e0;
-}
-
-.field {
-  margin-bottom: 22px;
-}
-.field label {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-  color: #444;
-  margin-bottom: 8px;
-}
-.field input,
-.field textarea {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1.5px solid #e0ddd5;
-  border-radius: 12px;
-  font-size: 15px;
-  outline: none;
-  font-family: inherit;
-  background: #faf9f7;
-}
-.field input:focus,
-.field textarea:focus {
-  border-color: #c9a96e;
-}
-
-.category-options {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.category-options button {
-  padding: 10px 20px;
-  border: 1.5px solid #e0ddd5;
-  background: #fff;
-  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-full);
   cursor: pointer;
   font-size: 14px;
-  color: #555;
-}
-.category-options button.active {
-  background: #1a3a5c;
-  color: #fff;
-  border-color: #1a3a5c;
+  color: var(--text-secondary);
+  transition: all 0.15s;
 }
 
-.tag-list {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 10px;
+.category-pills button:hover {
+  border-color: var(--border-hover);
 }
-.tag {
-  display: inline-flex;
+
+.category-pills button.active {
+  background: var(--primary);
+  color: var(--text-on-primary);
+  border-color: var(--primary);
+}
+
+.upload-zone {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 5px 12px;
-  background: #f0ece4;
-  color: #5a5a5a;
-  border-radius: 10px;
-  font-size: 13px;
-}
-.tag-remove {
-  background: none;
-  border: none;
-  color: #999;
+  gap: var(--space-2);
+  padding: var(--space-8);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  font-size: 16px;
-  line-height: 1;
+  transition: all 0.2s;
+  background: var(--bg);
+}
+
+.upload-zone:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
 }
 
 .file-input {
   display: none;
 }
-.file-upload-area {
-  border: 2px dashed #e0ddd5;
-  border-radius: 12px;
-  overflow: hidden;
-}
-.upload-trigger {
-  width: 100%;
-  padding: 40px 20px;
-  border: none;
-  background: #faf9f7;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  color: #666;
-  font-size: 14px;
-}
-.upload-trigger:hover {
-  background: #f5f3ee;
-}
+
 .upload-icon {
   font-size: 32px;
+  opacity: 0.4;
 }
+
+.upload-text {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
 .upload-hint {
   font-size: 12px;
-  color: #aaa;
+  color: var(--text-muted);
 }
 
 .file-selected {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 18px;
-  background: #e8f5e9;
-  border-radius: 12px;
+  padding: var(--space-4) var(--space-5);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
 }
+
 .file-info {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
+
 .file-name {
   font-weight: 500;
   font-size: 14px;
-  color: #333;
+  color: var(--text);
 }
+
 .file-size {
   font-size: 12px;
-  color: #666;
-}
-.file-remove {
-  padding: 6px 14px;
-  border: 1px solid #c9a96e;
-  background: #fff;
-  color: #8a6d3b;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;
+  color: var(--text-muted);
 }
 
 .upload-progress {
-  margin-top: 8px;
-  color: #c9a96e;
+  margin-top: var(--space-2);
+  color: var(--primary);
   font-size: 13px;
 }
 
-.points-info {
+.points-tip {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 14px 18px;
-  background: #fff8e1;
-  border-radius: 12px;
-  margin-bottom: 22px;
-}
-.points-label {
-  font-size: 14px;
-  color: #555;
-}
-.points-value {
-  font-size: 16px;
-  font-weight: 700;
-  color: #e65100;
-}
-.points-hint {
-  font-size: 12px;
-  color: #888;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-5);
 }
 
-.actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 8px;
+.tip-label {
+  font-size: 14px;
+  color: var(--text-secondary);
 }
-.btn-submit {
-  padding: 12px 32px;
-  border: none;
-  background: #1a3a5c;
-  color: #fff;
-  border-radius: 12px;
-  cursor: pointer;
+
+.tip-value {
   font-size: 15px;
   font-weight: 600;
+  color: var(--text);
 }
-.btn-submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+
+.tip-hint {
+  font-size: 12px;
+  color: var(--text-muted);
 }
-.btn-cancel {
-  padding: 12px 32px;
-  border: 1.5px solid #e0ddd5;
-  background: #fff;
-  color: #555;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 15px;
+
+.form-actions {
+  display: flex;
+  gap: var(--space-3);
 }
-.error {
-  color: #c0392b;
-  margin-top: 14px;
+
+.form-error {
+  color: var(--danger);
+  margin-top: var(--space-3);
   font-size: 14px;
 }
 </style>
