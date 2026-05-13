@@ -19,17 +19,6 @@
       </div>
 
       <div class="field">
-        <label>标签</label>
-        <input v-model="tagInput" placeholder="输入标签，按回车添加" @keyup.enter="addTag" />
-        <div class="tag-list">
-          <span v-for="(tag, i) in tags" :key="i" class="tag">
-            {{ tag }}
-            <button class="tag-remove" @click="tags.splice(i, 1)">&times;</button>
-          </span>
-        </div>
-      </div>
-
-      <div class="field">
         <label>简介</label>
         <textarea v-model="form.description" placeholder="简要描述资源内容..." rows="4" />
       </div>
@@ -80,8 +69,6 @@ import { getCategories } from '../api/resource'
 
 const router = useRouter()
 const fileInput = ref(null)
-const tagInput = ref('')
-const tags = ref([])
 const selectedFile = ref(null)
 const fileUploading = ref(false)
 const uploadProgress = ref(0)
@@ -93,21 +80,12 @@ const form = reactive({
   title: '',
   category: '',
   description: '',
-  tags: '',
   uploadId: ''
 })
 
 const canSubmit = computed(() => {
   return form.title.trim() && form.category && form.uploadId
 })
-
-function addTag() {
-  const t = tagInput.value.trim()
-  if (t && !tags.value.includes(t)) {
-    tags.value.push(t)
-  }
-  tagInput.value = ''
-}
 
 function formatFileSize(size) {
   if (size < 1024) return size + ' B'
@@ -175,7 +153,6 @@ async function submit() {
 
   submitting.value = true
   try {
-    form.tags = JSON.stringify(tags.value)
     await submitResource(form)
     router.push('/resources')
   } catch (e) {

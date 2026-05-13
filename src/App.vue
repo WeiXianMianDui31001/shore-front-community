@@ -8,9 +8,14 @@
       <div class="nav-links">
         <router-link to="/" class="nav-link">帖子广场</router-link>
         <router-link to="/resources" class="nav-link">资源大厅</router-link>
+        <router-link to="/info" class="nav-link">信息聚合</router-link>
+        <router-link to="/rooms" class="nav-link">讨论室</router-link>
         <router-link to="/create" class="nav-link nav-cta">+ 发布</router-link>
         <router-link v-if="userStore.isLoggedIn" to="/points" class="nav-link">
           我的积分
+        </router-link>
+        <router-link v-if="userStore.isLoggedIn" to="/collections" class="nav-link">
+          我的收藏
         </router-link>
         <router-link v-if="userStore.isLoggedIn" to="/my-uploads" class="nav-link">
           我的上传
@@ -18,30 +23,57 @@
         <router-link v-if="userStore.isAdmin" to="/admin" class="nav-link nav-admin">
           管理后台
         </router-link>
+        <router-link v-if="userStore.isLoggedIn" to="/notifications" class="nav-link noti-link">
+          <span class="noti-bell">&#128276;</span>
+          <span v-if="unreadCount > 0" class="noti-badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+        </router-link>
         <div v-if="userStore.isLoggedIn" class="user-badge">
-          <img v-if="userStore.userInfo?.avatarUrl" :src="userStore.userInfo.avatarUrl" class="avatar" />
-          <div v-else class="avatar avatar-placeholder">{{ userStore.userInfo?.nickname?.[0] || '?' }}</div>
+          <img v-if="userStore.userInfo?.avatarUrl" :src="userStore.userInfo.avatarUrl" class="avatar" @click="router.push('/profile')" />
+          <div v-else class="avatar avatar-placeholder" @click="router.push('/profile')">{{ userStore.userInfo?.nickname?.[0] || '?' }}</div>
           <span class="role-tag" :class="roleClass">{{ roleText }}</span>
           <button class="logout-btn" @click="logout">退出</button>
         </div>
       </div>
     </nav>
-    <main>
+    <main :class="{ 'room-fullscreen': isRoomPage }">
       <router-view />
     </main>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from './stores/user'
+import { getUnreadCount } from './api/notification'
 
 const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
 
 const showNav = computed(() => route.path !== '/login')
+const isRoomPage = computed(() => route.path.startsWith('/room'))
+const unreadCount = ref(0)
+let pollTimer = null
+
+async function fetchUnreadCount() {
+  if (!userStore.isLoggedIn) return
+  try {
+    const res = await getUnreadCount()
+    unreadCount.value = res.data?.count || 0
+  } catch (e) {
+    // ignore
+  }
+}
+
+onMounted(() => {
+  fetchUnreadCount()
+  pollTimer = setInterval(fetchUnreadCount, 5000)
+})
+
+onUnmounted(() => {
+  if (pollTimer) clearInterval(pollTimer)
+})
 
 const roleText = computed(() => {
   const r = userStore.userInfo?.role
@@ -165,6 +197,7 @@ body {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #e8e4dc;
+  cursor: pointer;
 }
 
 .avatar-placeholder {
@@ -175,6 +208,7 @@ body {
   color: #fff;
   font-size: 14px;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .role-tag {
@@ -201,9 +235,34 @@ body {
   color: #e74c3c;
 }
 
+.noti-link {
+  position: relative;
+  padding: 6px 10px;
+}
+.noti-bell {
+  font-size: 18px;
+}
+.noti-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #c0392b;
+  color: #fff;
+  font-size: 11px;
+  padding: 1px 5px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
 main {
   max-width: 900px;
   margin: 0 auto;
   padding: 24px;
+}
+
+main.room-fullscreen {
+  max-width: none;
+  padding: 0;
+  height: calc(100vh - 64px);
 }
 </style>

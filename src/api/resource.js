@@ -24,6 +24,18 @@ export function myUploads(params) {
   return request.get('/resources/my', { params })
 }
 
+export function collectResource(id) {
+  return request.post(`/resources/${id}/collect`)
+}
+
+export function uncollectResource(id) {
+  return request.delete(`/resources/${id}/collect`)
+}
+
+export function myResourceCollects(params) {
+  return request.get('/resources/my-collects', { params })
+}
+
 export function getCategories() {
   // 分类列表可以硬编码或从后端获取，暂时硬编码
   return Promise.resolve({ data: ['考研资料', '求职简历', '面试经验', '笔试真题', '课程笔记', '其他'] })

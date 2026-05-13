@@ -32,6 +32,10 @@ export function uncollectPost(id) {
   return request.delete(`/posts/${id}/collect`)
 }
 
+export function myPostCollects(params) {
+  return request.get('/posts/my-collects', { params })
+}
+
 export function uploadImage(file) {
   const formData = new FormData()
   formData.append('file', file)

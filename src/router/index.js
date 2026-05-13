@@ -51,9 +51,51 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/collections',
+    name: 'Collections',
+    component: () => import('../views/CollectionView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/my-uploads',
     name: 'MyUploads',
     component: () => import('../views/MyUploadsView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/notifications',
+    name: 'Notifications',
+    component: () => import('../views/NotificationView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/info',
+    name: 'InfoList',
+    component: () => import('../views/InfoListView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/info/:id',
+    name: 'InfoDetail',
+    component: () => import('../views/InfoDetailView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../views/ProfileView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/rooms',
+    name: 'RoomLobby',
+    component: () => import('../views/RoomLobbyView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/room/:id',
+    name: 'RoomDetail',
+    component: () => import('../views/RoomDetailView.vue'),
     meta: { requiresAuth: true }
   },
   {

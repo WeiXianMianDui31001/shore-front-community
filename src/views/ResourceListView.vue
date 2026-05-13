@@ -28,9 +28,6 @@
           <p class="resource-desc">{{ res.description || '暂无简介' }}</p>
           <div class="resource-meta">
             <span class="category-tag">{{ res.category }}</span>
-            <span v-if="res.tags" class="tag-list">
-              <span v-for="tag in parseTags(res.tags)" :key="tag" class="tag">{{ tag }}</span>
-            </span>
           </div>
         </div>
         <div class="resource-side">
@@ -77,14 +74,6 @@ const category = ref('')
 const categories = ref([])
 
 const totalPages = computed(() => Math.ceil(total.value / size.value))
-
-function parseTags(tagsJson) {
-  try {
-    return JSON.parse(tagsJson)
-  } catch {
-    return []
-  }
-}
 
 function statusText(status) {
   if (status === 0) return '待审核'
@@ -271,19 +260,6 @@ onMounted(async () => {
   border-radius: 8px;
   font-weight: 500;
 }
-.tag-list {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.tag {
-  font-size: 12px;
-  padding: 3px 8px;
-  background: #f0ece4;
-  color: #5a5a5a;
-  border-radius: 6px;
-}
-
 .resource-side {
   display: flex;
   flex-direction: column;

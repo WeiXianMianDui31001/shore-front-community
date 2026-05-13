@@ -49,7 +49,7 @@
         <div v-for="tx in transactions" :key="tx.id" class="tx-item">
           <div class="tx-main">
             <div class="tx-type">
-              <span class="tx-icon" :class="txIconClass(tx.sourceType)">{{ txIcon(tx.sourceType) }}</span>
+              <span class="tx-icon" :class="txIconClass(tx.sourceType)" v-html="txIcon(tx.sourceType)"></span>
               <span class="tx-name">{{ txName(tx.sourceType) }}</span>
             </div>
             <div class="tx-note" v-if="tx.note">{{ tx.note }}</div>

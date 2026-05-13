@@ -78,7 +78,12 @@
       <div class="comments">
         <div v-for="c in comments" :key="c.id" class="comment-item">
           <div class="comment-header">
-            <span class="comment-author">用户 {{ c.authorId }}</span>
+            <div class="comment-author-info">
+              <img v-if="c.authorAvatar" :src="c.authorAvatar" class="comment-author-avatar" />
+              <div v-else class="comment-author-avatar avatar-placeholder">{{ c.authorNickname?.[0] || '?' }}</div>
+              <span class="comment-author-name">{{ c.authorNickname || '匿名用户' }}</span>
+              <span v-if="c.authorRole === 2" class="comment-author-role role-admin">管理员</span>
+            </div>
             <span class="comment-time">{{ formatTime(c.createdAt) }}</span>
           </div>
           <p v-if="c.content" class="comment-content">{{ c.content }}</p>
@@ -215,14 +220,18 @@ async function toggleCollect() {
 
 async function toggleEndorse() {
   if (!post.value) return
-  if (post.value.endorsed) {
-    await unendorsePost(post.value.id)
-    post.value.endorsed = false
-    post.value.endorseCount = Math.max((post.value.endorseCount || 0) - 1, 0)
-  } else {
-    await endorsePost(post.value.id)
-    post.value.endorsed = true
-    post.value.endorseCount = (post.value.endorseCount || 0) + 1
+  try {
+    if (post.value.endorsed) {
+      await unendorsePost(post.value.id)
+      post.value.endorsed = false
+      post.value.endorseCount = Math.max((post.value.endorseCount || 0) - 1, 0)
+    } else {
+      await endorsePost(post.value.id)
+      post.value.endorsed = true
+      post.value.endorseCount = (post.value.endorseCount || 0) + 1
+    }
+  } catch (e) {
+    alert(e.message || '操作失败')
   }
 }
 
@@ -500,10 +509,36 @@ onMounted(() => {
   justify-content: space-between;
   margin-bottom: 8px;
 }
-.comment-author {
+.comment-author-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.comment-author-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.comment-author-avatar.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a3a5c;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+.comment-author-name {
   font-weight: 600;
   font-size: 14px;
   color: #333;
+}
+.comment-author-role {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 500;
 }
 .comment-time {
   font-size: 12px;

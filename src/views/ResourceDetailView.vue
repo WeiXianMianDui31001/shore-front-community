@@ -20,13 +20,6 @@
           <p class="description">{{ resource.description || '暂无简介' }}</p>
         </div>
 
-        <div v-if="resource.tags" class="info-section">
-          <h3 class="section-title">标签</h3>
-          <div class="tags">
-            <span v-for="tag in parseTags(resource.tags)" :key="tag" class="tag">{{ tag }}</span>
-          </div>
-        </div>
-
         <div class="info-section">
           <h3 class="section-title">文件信息</h3>
           <div class="file-info-grid">
@@ -56,11 +49,15 @@
           <span class="cost-value">{{ resource.pointsCost || 0 }} 积分</span>
           <span class="balance-label">（我的余额：{{ myPoints }} 积分）</span>
         </div>
-        <button
-          class="download-btn"
-          :disabled="resource.status !== 1 || downloading || resource.pointsCost > myPoints"
-          @click="doDownload"
-        >
+        <div class="action-buttons">
+          <button class="collect-btn" :class="{ active: resource.collected }" @click="toggleCollect">
+            <span>&#9733;</span> {{ resource.collected ? '已收藏' : '收藏' }}
+          </button>
+          <button
+            class="download-btn"
+            :disabled="resource.status !== 1 || downloading || resource.pointsCost > myPoints"
+            @click="doDownload"
+          >
           <span v-if="downloading">处理中...</span>
           <span v-else-if="resource.status !== 1">资源暂不可下载</span>
           <span v-else-if="resource.pointsCost > myPoints">积分不足</span>
@@ -68,15 +65,16 @@
         </button>
       </div>
     </div>
+  </div>
 
-    <div v-else class="empty">资源不存在</div>
+  <div v-else class="empty">资源不存在</div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getResource, downloadResource } from '../api/resource'
+import { getResource, downloadResource, collectResource, uncollectResource } from '../api/resource'
 import { getPointsSummary } from '../api/points'
 
 const route = useRoute()
@@ -86,10 +84,6 @@ const resource = ref(null)
 const loading = ref(false)
 const downloading = ref(false)
 const myPoints = ref(0)
-
-function parseTags(tagsJson) {
-  try { return JSON.parse(tagsJson) } catch { return [] }
-}
 
 function formatTime(t) {
   if (!t) return ''
@@ -129,6 +123,17 @@ async function loadMyPoints() {
     myPoints.value = res.data.balance || 0
   } catch (e) {
     console.error(e)
+  }
+}
+
+async function toggleCollect() {
+  if (!resource.value) return
+  if (resource.value.collected) {
+    await uncollectResource(resource.value.id)
+    resource.value.collected = false
+  } else {
+    await collectResource(resource.value.id)
+    resource.value.collected = true
   }
 }
 
@@ -234,19 +239,6 @@ onMounted(() => {
   line-height: 1.8;
   color: #444;
 }
-.tags {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.tag {
-  font-size: 13px;
-  padding: 5px 12px;
-  background: #f0ece4;
-  color: #5a5a5a;
-  border-radius: 10px;
-}
-
 .file-info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -296,6 +288,25 @@ onMounted(() => {
 .balance-label {
   color: #888;
   font-size: 13px;
+}
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+.collect-btn {
+  padding: 12px 24px;
+  border: 1.5px solid #e0ddd5;
+  background: #fff;
+  color: #555;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+.collect-btn.active {
+  background: #fff8e1;
+  border-color: #e65100;
+  color: #e65100;
 }
 .download-btn {
   padding: 12px 32px;
