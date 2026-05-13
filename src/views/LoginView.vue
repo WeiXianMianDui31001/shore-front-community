@@ -28,7 +28,7 @@
           <label>验证码</label>
           <div class="verify-row">
             <input v-model="form.verifyCode" placeholder="123456" required />
-            <button type="button" class="btn-small" @click="sendCode" :disabled="countdown > 0">
+            <button type="button" class="btn btn-primary btn-sm" @click="sendCode" :disabled="countdown > 0">
               {{ countdown > 0 ? `${countdown}s` : '获取验证码' }}
             </button>
           </div>
@@ -47,7 +47,7 @@
           </select>
         </div>
 
-        <button type="submit" class="btn-primary" :disabled="loading">
+        <button type="submit" class="btn btn-primary btn-lg" :disabled="loading" style="width: 100%; margin-top: var(--space-3);">
           {{ loading ? '处理中...' : (activeTab === 'login' ? '登录' : '注册') }}
         </button>
       </form>
@@ -130,130 +130,90 @@ async function handleSubmit() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, #1a3a5c 0%, #2d5a87 40%, #c9a96e 100%);
+  background: var(--bg);
 }
+
 .login-card {
   width: 400px;
-  padding: 40px;
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  padding: var(--space-8);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
 }
+
 .brand {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: var(--space-2);
   margin-bottom: 4px;
 }
+
 .brand-icon {
-  color: #c9a96e;
+  color: var(--primary);
   font-size: 22px;
 }
+
 h1 {
-  font-family: 'Noto Serif SC', serif;
   text-align: center;
   font-size: 28px;
-  color: #1a3a5c;
+  color: var(--primary);
+  font-weight: 700;
 }
+
 .subtitle {
   text-align: center;
-  color: #999;
+  color: var(--text-muted);
   font-size: 14px;
-  margin-bottom: 28px;
+  margin-bottom: var(--space-6);
 }
+
 .tabs {
   display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
+  gap: var(--space-1);
+  margin-bottom: var(--space-5);
+  padding: var(--space-1);
+  background: var(--bg);
+  border-radius: var(--radius-md);
 }
+
 .tabs button {
   flex: 1;
-  padding: 10px;
+  padding: var(--space-2);
   border: none;
-  background: #f5f3ef;
-  border-radius: 10px;
+  background: transparent;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.2s;
   font-weight: 500;
-  color: #666;
+  color: var(--text-muted);
+  transition: all 0.15s;
 }
+
+.tabs button:hover {
+  color: var(--text-secondary);
+}
+
 .tabs button.active {
-  background: #1a3a5c;
-  color: #fff;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
 }
-.field {
-  margin-bottom: 16px;
-}
-.field label {
-  display: block;
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-.field input,
-.field select {
-  width: 100%;
-  padding: 11px 14px;
-  border: 1.5px solid #e8e4dc;
-  border-radius: 10px;
-  font-size: 14px;
-  outline: none;
-  transition: border 0.2s;
-  background: #faf9f7;
-}
-.field input:focus,
-.field select:focus {
-  border-color: #c9a96e;
-}
+
 .verify-row {
   display: flex;
-  gap: 8px;
+  gap: var(--space-2);
 }
+
 .verify-row input {
   flex: 1;
 }
-.btn-small {
-  padding: 0 16px;
-  border: none;
-  background: #1a3a5c;
-  color: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 13px;
-  white-space: nowrap;
-  transition: opacity 0.2s;
-}
-.btn-small:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.btn-primary {
-  width: 100%;
-  padding: 13px;
-  border: none;
-  background: #1a3a5c;
-  color: #fff;
-  border-radius: 10px;
-  font-size: 15px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: background 0.2s;
-  font-weight: 600;
-}
-.btn-primary:hover {
-  background: #0f2540;
-}
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+
 .error {
-  color: #c0392b;
+  color: var(--danger);
   text-align: center;
   font-size: 13px;
-  margin-top: 14px;
+  margin-top: var(--space-3);
 }
 </style>

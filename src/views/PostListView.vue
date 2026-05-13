@@ -1,5 +1,5 @@
 <template>
-  <div class="post-list-page">
+  <div class="page-container">
     <div class="page-header">
       <h2>帖子广场</h2>
       <p class="page-desc">发现备考与求职路上的同行者</p>
@@ -8,12 +8,13 @@
     <div class="toolbar">
       <div class="search-box">
         <input v-model="searchKeyword" placeholder="搜索帖子标题或内容..." @keyup.enter="doSearch" />
-        <button class="search-btn" @click="doSearch">搜索</button>
+        <button class="btn btn-primary btn-sm" @click="doSearch">搜索</button>
       </div>
-      <div class="filter-tabs">
+      <div class="segmented">
         <button :class="{ active: mode === 'recommend' }" @click="mode = 'recommend'; loadPosts()">智能推荐</button>
         <button :class="{ active: mode === 'latest' }" @click="mode = 'latest'; loadPosts()">最新</button>
       </div>
+      <router-link to="/create" class="btn btn-primary">+ 发布帖子</router-link>
     </div>
 
     <div v-if="loading" class="loading">加载中...</div>
@@ -30,8 +31,8 @@
             </div>
           </div>
           <div class="badges">
-            <span v-if="post.isPinned" class="pin-badge">置顶</span>
-            <span v-if="post.isExcellent" class="excellent-badge">经验帖</span>
+            <span v-if="post.isPinned" class="badge badge-info">置顶</span>
+            <span v-if="post.isExcellent" class="badge badge-warning">经验帖</span>
           </div>
         </div>
 
@@ -59,10 +60,10 @@
         </div>
 
         <div v-if="userStore.isAdmin" class="admin-actions" @click.stop>
-          <button class="admin-btn" @click="togglePostStatus(post)">
+          <button class="btn btn-sm btn-secondary" @click="togglePostStatus(post)">
             {{ post.status === 2 ? '上架' : '下架' }}
           </button>
-          <button class="admin-btn" @click="togglePin(post)">
+          <button class="btn btn-sm btn-secondary" @click="togglePin(post)">
             {{ post.isPinned ? '取消置顶' : '置顶' }}
           </button>
         </div>
@@ -177,251 +178,133 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-header {
-  margin-bottom: 24px;
-}
-.page-header h2 {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 28px;
-  color: #1a3a5c;
-}
-.page-desc {
-  color: #888;
-  font-size: 14px;
-  margin-top: 4px;
-}
-
-.toolbar {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.search-box {
-  display: flex;
-  flex: 1;
-  min-width: 260px;
-  gap: 8px;
-}
-.search-box input {
-  flex: 1;
-  padding: 10px 14px;
-  border: 1.5px solid #e0ddd5;
-  border-radius: 10px;
-  font-size: 14px;
-  outline: none;
-  background: #fff;
-}
-.search-box input:focus {
-  border-color: #c9a96e;
-}
-.search-btn {
-  padding: 10px 20px;
-  border: none;
-  background: #1a3a5c;
-  color: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 500;
-}
-.filter-tabs {
-  display: flex;
-  gap: 8px;
-}
-.filter-tabs button {
-  padding: 8px 16px;
-  border: 1.5px solid #e0ddd5;
-  background: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #555;
-  transition: all 0.2s;
-}
-.filter-tabs button.active {
-  background: #1a3a5c;
-  color: #fff;
-  border-color: #1a3a5c;
-}
-
 .posts {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-3);
 }
+
 .post-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 24px;
-  border: 1px solid #ebe8e0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.2s ease;
 }
+
 .post-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(26, 58, 92, 0.08);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
 }
 
 .post-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: var(--space-3);
 }
+
 .author {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2);
 }
+
 .author-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
   object-fit: cover;
 }
+
 .avatar-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #1a3a5c;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-}
-.author-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.author-name {
-  font-weight: 600;
-  font-size: 14px;
-  color: #333;
-}
-.author-role {
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-weight: 500;
-}
-.role-study { background: #e3f2fd; color: #1565c0; }
-.role-job { background: #fff3e0; color: #e65100; }
-.role-admin { background: #fce4ec; color: #c2185b; }
-.badges {
-  display: flex;
-  gap: 8px;
-}
-.pin-badge {
-  font-size: 12px;
-  padding: 4px 10px;
-  background: #c9a96e;
-  color: #fff;
-  border-radius: 8px;
-  font-weight: 600;
-}
-.excellent-badge {
-  font-size: 12px;
-  padding: 4px 10px;
-  background: #fff8e1;
-  color: #e65100;
-  border-radius: 8px;
+  background: var(--primary);
+  color: var(--text-on-primary);
+  font-size: 13px;
   font-weight: 600;
 }
 
+.author-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.author-name {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.author-role {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+}
+
+.role-study { background: #eff6ff; color: #2563eb; }
+.role-job { background: #fff7ed; color: #ea580c; }
+.role-admin { background: #fef2f2; color: #dc2626; }
+
+.badges {
+  display: flex;
+  gap: var(--space-2);
+}
+
 .post-title {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 8px;
+  color: var(--text);
+  margin-bottom: var(--space-2);
   line-height: 1.4;
 }
+
 .post-excerpt {
-  color: #555;
+  color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.6;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
 
 .tags {
   display: flex;
-  gap: 8px;
+  gap: var(--space-2);
   flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-.tag {
-  font-size: 12px;
-  padding: 4px 10px;
-  background: #f0ece4;
-  color: #5a5a5a;
-  border-radius: 8px;
+  margin-bottom: var(--space-3);
 }
 
 .post-footer {
   display: flex;
-  gap: 16px;
+  gap: var(--space-4);
   align-items: center;
-  color: #888;
+  color: var(--text-muted);
   font-size: 13px;
 }
+
 .stat {
   display: flex;
   align-items: center;
   gap: 4px;
 }
+
 .stat-icon {
   font-size: 14px;
 }
+
 .post-time {
   margin-left: auto;
-  color: #aaa;
 }
 
 .admin-actions {
   display: flex;
-  gap: 8px;
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px dashed #e0ddd5;
-}
-.admin-btn {
-  padding: 6px 12px;
-  border: 1px solid #c9a96e;
-  background: #fffaf0;
-  color: #8a6d3b;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;
-}
-.admin-btn:hover {
-  background: #c9a96e;
-  color: #fff;
-}
-
-.loading, .empty {
-  text-align: center;
-  padding: 60px 0;
-  color: #999;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  margin-top: 32px;
-}
-.pagination button {
-  padding: 8px 18px;
-  border: 1px solid #e0ddd5;
-  background: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-}
-.pagination button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
 }
 </style>

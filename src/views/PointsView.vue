@@ -1,11 +1,11 @@
 <template>
-  <div class="points-page">
+  <div class="page-container">
     <div class="page-header">
       <h2>我的积分</h2>
       <p class="page-desc">积分收支明细，每一笔都清晰可查</p>
     </div>
 
-    <div class="summary-cards">
+    <div class="summary-grid">
       <div class="summary-card primary">
         <span class="summary-label">当前余额</span>
         <span class="summary-value">{{ summary.balance || 0 }}</span>
@@ -29,31 +29,27 @@
       </div>
     </div>
 
-    <div class="transactions-section">
+    <div class="card">
       <div class="section-header">
         <h3 class="section-title">积分流水</h3>
-        <div class="filter">
-          <select v-model="filterType" @change="page = 1; loadTransactions()">
-            <option value="">全部</option>
-            <option value="UPLOAD_REWARD">上传奖励</option>
-            <option value="DOWNLOAD_COST">下载消耗</option>
-            <option value="DOWNLOAD_SHARE">下载分成</option>
-            <option value="EXCELLENT_POST">经验帖奖励</option>
-          </select>
-        </div>
+        <select v-model="filterType" @change="page = 1; loadTransactions()" class="filter-select">
+          <option value="">全部</option>
+          <option value="UPLOAD_REWARD">上传奖励</option>
+          <option value="DOWNLOAD_COST">下载消耗</option>
+          <option value="DOWNLOAD_SHARE">下载分成</option>
+          <option value="EXCELLENT_POST">经验帖奖励</option>
+        </select>
       </div>
 
       <div v-if="loading" class="loading">加载中...</div>
 
-      <div v-else class="transactions">
+      <div v-else class="tx-list">
         <div v-for="tx in transactions" :key="tx.id" class="tx-item">
+          <div class="tx-icon" :class="txIconClass(tx.sourceType)" v-html="txIcon(tx.sourceType)"></div>
           <div class="tx-main">
-            <div class="tx-type">
-              <span class="tx-icon" :class="txIconClass(tx.sourceType)" v-html="txIcon(tx.sourceType)"></span>
-              <span class="tx-name">{{ txName(tx.sourceType) }}</span>
-            </div>
-            <div class="tx-note" v-if="tx.note">{{ tx.note }}</div>
-            <div class="tx-time">{{ formatTime(tx.createdAt) }}</div>
+            <span class="tx-name">{{ txName(tx.sourceType) }}</span>
+            <span v-if="tx.note" class="tx-note">{{ tx.note }}</span>
+            <span class="tx-time">{{ formatTime(tx.createdAt) }}</span>
           </div>
           <div class="tx-amount" :class="tx.amount > 0 ? 'income' : 'expense'">
             {{ tx.amount > 0 ? '+' : '' }}{{ tx.amount }}
@@ -155,177 +151,165 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-header {
-  margin-bottom: 24px;
-}
-.page-header h2 {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 28px;
-  color: #1a3a5c;
-}
-.page-desc {
-  color: #888;
-  font-size: 14px;
-  margin-top: 4px;
-}
-
-.summary-cards {
+.summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
 }
+
 .summary-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid #ebe8e0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-1);
 }
+
 .summary-card.primary {
-  background: #1a3a5c;
-  color: #fff;
-  border-color: #1a3a5c;
+  background: var(--primary);
+  color: var(--text-on-primary);
+  border-color: var(--primary);
 }
+
 .summary-label {
   font-size: 13px;
-  color: #888;
+  color: var(--text-muted);
 }
+
 .summary-card.primary .summary-label {
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
 }
+
 .summary-value {
   font-size: 24px;
   font-weight: 700;
-  color: #1a1a1a;
-}
-.summary-card.primary .summary-value {
-  color: #fff;
-}
-.summary-value.income {
-  color: #2e7d32;
-}
-.summary-value.expense {
-  color: #c62828;
-}
-.summary-unit {
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
+  color: var(--text);
 }
 
-.transactions-section {
-  background: #fff;
-  border-radius: 20px;
-  padding: 24px;
-  border: 1px solid #ebe8e0;
+.summary-card.primary .summary-value {
+  color: var(--text-on-primary);
 }
+
+.summary-value.income {
+  color: var(--success);
+}
+
+.summary-value.expense {
+  color: var(--danger);
+}
+
+.summary-unit {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.card {
+  padding: var(--space-6);
+}
+
 .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
-}
-.section-title {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 20px;
-  color: #1a3a5c;
-}
-.filter select {
-  padding: 8px 14px;
-  border: 1.5px solid #e0ddd5;
-  border-radius: 10px;
-  font-size: 14px;
-  background: #faf9f7;
-  outline: none;
-  cursor: pointer;
+  margin-bottom: var(--space-5);
 }
 
-.transactions {
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.filter-select {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  background: var(--bg);
+  outline: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.filter-select:focus {
+  border-color: var(--primary);
+}
+
+.tx-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-2);
 }
+
 .tx-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px;
-  background: #faf9f7;
-  border-radius: 12px;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  transition: background 0.15s;
 }
-.tx-main {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+
+.tx-item:hover {
+  background: var(--surface-hover);
 }
-.tx-type {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+
 .tx-icon {
-  font-size: 18px;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0ece4;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  flex-shrink: 0;
+  background: var(--surface);
 }
-.tx-icon.icon-reward { background: #e8f5e9; }
-.tx-icon.icon-cost { background: #fce4ec; }
-.tx-icon.icon-share { background: #e3f2fd; }
-.tx-icon.icon-star { background: #fff8e1; }
+
+.tx-icon.icon-reward { background: #dcfce7; }
+.tx-icon.icon-cost { background: var(--danger-bg); }
+.tx-icon.icon-share { background: #dbeafe; }
+.tx-icon.icon-star { background: #fef3c7; }
+
+.tx-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
 .tx-name {
   font-weight: 600;
   font-size: 14px;
-  color: #333;
+  color: var(--text);
 }
+
 .tx-note {
   font-size: 13px;
-  color: #666;
+  color: var(--text-secondary);
 }
+
 .tx-time {
   font-size: 12px;
-  color: #aaa;
+  color: var(--text-muted);
 }
+
 .tx-amount {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
+  flex-shrink: 0;
 }
+
 .tx-amount.income {
-  color: #2e7d32;
+  color: var(--success);
 }
+
 .tx-amount.expense {
-  color: #c62828;
-}
-
-.loading, .empty {
-  text-align: center;
-  padding: 40px 0;
-  color: #999;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  margin-top: 24px;
-}
-.pagination button {
-  padding: 8px 18px;
-  border: 1px solid #e0ddd5;
-  background: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-}
-.pagination button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+  color: var(--danger);
 }
 </style>

@@ -1,34 +1,34 @@
 <template>
-  <div class="my-uploads-page">
+  <div class="page-container">
     <div class="page-header">
       <h2>我的上传</h2>
       <p class="page-desc">追踪你上传的资源状态与审核进度</p>
     </div>
 
     <div class="toolbar">
-      <div class="status-filter">
+      <div class="status-bar">
         <button :class="{ active: status === null }" @click="status = null; loadUploads()">全部</button>
         <button :class="{ active: status === 0 }" @click="status = 0; loadUploads()">待审核</button>
         <button :class="{ active: status === 1 }" @click="status = 1; loadUploads()">已上架</button>
         <button :class="{ active: status === 2 }" @click="status = 2; loadUploads()">已拒绝</button>
       </div>
-      <router-link to="/resources/upload" class="upload-btn-primary">+ 上传新资源</router-link>
+      <router-link to="/resources/upload" class="btn btn-primary">+ 上传新资源</router-link>
     </div>
 
     <div v-if="loading" class="loading">加载中...</div>
 
-    <div v-else class="uploads">
-      <div v-for="res in uploads" :key="res.id" class="upload-card">
+    <div v-else class="upload-list">
+      <div v-for="res in uploads" :key="res.id" class="upload-card card">
         <div class="upload-main">
           <h3 class="upload-title">{{ res.title }}</h3>
           <p class="upload-desc">{{ res.description || '暂无简介' }}</p>
           <div class="upload-meta">
-            <span class="category-tag">{{ res.category }}</span>
-            <span class="meta-item">{{ formatTime(res.createdAt) }}</span>
+            <span class="tag">{{ res.category }}</span>
+            <span class="meta-muted">{{ formatTime(res.createdAt) }}</span>
           </div>
         </div>
         <div class="upload-side">
-          <span class="status-badge" :class="statusClass(res.status)">{{ statusText(res.status) }}</span>
+          <span class="badge" :class="statusBadgeClass(res.status)">{{ statusText(res.status) }}</span>
           <div class="upload-stats">
             <span class="stat">
               <span class="stat-icon">&#128229;</span> {{ res.downloadCount || 0 }} 下载
@@ -71,11 +71,11 @@ function statusText(status) {
   return '未知'
 }
 
-function statusClass(status) {
-  if (status === 0) return 'status-pending'
-  if (status === 1) return 'status-approved'
-  if (status === 2) return 'status-rejected'
-  return ''
+function statusBadgeClass(status) {
+  if (status === 0) return 'badge-warning'
+  if (status === 1) return 'badge-success'
+  if (status === 2) return 'badge-danger'
+  return 'badge-neutral'
 }
 
 function formatTime(t) {
@@ -105,166 +105,102 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-header {
-  margin-bottom: 24px;
-}
-.page-header h2 {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 28px;
-  color: #1a3a5c;
-}
-.page-desc {
-  color: #888;
-  font-size: 14px;
-  margin-top: 4px;
+.status-bar {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
 }
 
-.toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.status-filter {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.status-filter button {
-  padding: 8px 16px;
-  border: 1.5px solid #e0ddd5;
-  background: #fff;
-  border-radius: 10px;
+.status-bar button {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-full);
   cursor: pointer;
-  font-size: 14px;
-  color: #555;
-}
-.status-filter button.active {
-  background: #1a3a5c;
-  color: #fff;
-  border-color: #1a3a5c;
-}
-.upload-btn-primary {
-  padding: 10px 20px;
-  background: #c9a96e;
-  color: #fff;
-  border-radius: 10px;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-}
-.upload-btn-primary:hover {
-  background: #b8985a;
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: all 0.15s;
 }
 
-.uploads {
+.status-bar button:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
+.status-bar button.active {
+  background: var(--primary);
+  color: var(--text-on-primary);
+  border-color: var(--primary);
+}
+
+.upload-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-3);
 }
+
 .upload-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 24px;
-  border: 1px solid #ebe8e0;
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-6);
 }
+
 .upload-main {
   flex: 1;
   min-width: 0;
 }
+
 .upload-title {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 8px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--space-2);
 }
+
 .upload-desc {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.5;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
+
 .upload-meta {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
   flex-wrap: wrap;
 }
-.category-tag {
-  font-size: 12px;
-  padding: 4px 10px;
-  background: #e3f2fd;
-  color: #1565c0;
-  border-radius: 8px;
-  font-weight: 500;
-}
-.meta-item {
+
+.meta-muted {
   font-size: 13px;
-  color: #aaa;
+  color: var(--text-muted);
 }
 
 .upload-side {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 10px;
+  gap: var(--space-2);
   min-width: 100px;
 }
-.status-badge {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-weight: 500;
-}
-.status-pending { background: #fff3e0; color: #e65100; }
-.status-approved { background: #e8f5e9; color: #2e7d32; }
-.status-rejected { background: #fce4ec; color: #c2185b; }
+
 .upload-stats {
   display: flex;
   flex-direction: column;
   gap: 4px;
   font-size: 13px;
-  color: #666;
+  color: var(--text-secondary);
   align-items: flex-end;
 }
+
 .stat {
   display: flex;
   align-items: center;
   gap: 4px;
 }
+
 .stat-icon {
   font-size: 14px;
-}
-
-.loading, .empty {
-  text-align: center;
-  padding: 60px 0;
-  color: #999;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  margin-top: 32px;
-}
-.pagination button {
-  padding: 8px 18px;
-  border: 1px solid #e0ddd5;
-  background: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-}
-.pagination button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
 }
 </style>
