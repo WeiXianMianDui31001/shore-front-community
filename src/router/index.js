@@ -87,6 +87,24 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/resume/templates',
+    name: 'ResumeTemplates',
+    component: () => import('../views/ResumeTemplateListView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/resume/my',
+    name: 'ResumeMy',
+    component: () => import('../views/ResumeMyListView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/resume/edit',
+    name: 'ResumeEdit',
+    component: () => import('../views/ResumeEditorView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/rooms',
     name: 'RoomLobby',
     component: () => import('../views/RoomLobbyView.vue'),
