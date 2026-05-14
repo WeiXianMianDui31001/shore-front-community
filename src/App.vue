@@ -47,6 +47,10 @@
             <span>消息中心</span>
             <span v-if="unreadCount > 0" class="nav-badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
           </router-link>
+          <router-link to="/resume/templates" class="nav-item" :class="{ active: route.path.startsWith('/resume') }">
+            <span class="nav-icon">&#128196;</span>
+            <span>简历模板</span>
+          </router-link>
         </div>
 
         <div v-if="userStore.isAdmin" class="nav-section">
