@@ -31,7 +31,10 @@
         <div class="form-row">
           <div class="field">
             <label>身份</label>
-            <input :value="roleText(form.role)" disabled />
+            <select v-model="form.role">
+              <option :value="0">备考用户</option>
+              <option :value="1">求职用户</option>
+            </select>
           </div>
           <div class="field">
             <label>当前积分</label>
@@ -104,9 +107,10 @@ async function saveProfile() {
   try {
     await updateProfile({
       nickname: form.value.nickname,
-      avatarUrl: form.value.avatarUrl
+      avatarUrl: form.value.avatarUrl,
+      role: form.value.role
     })
-    const updated = { ...userStore.userInfo, nickname: form.value.nickname, avatarUrl: form.value.avatarUrl }
+    const updated = { ...userStore.userInfo, nickname: form.value.nickname, avatarUrl: form.value.avatarUrl, role: form.value.role }
     userStore.setUserInfo(updated)
     alert('保存成功')
   } catch (e) {
