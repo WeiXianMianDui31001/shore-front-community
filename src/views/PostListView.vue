@@ -11,8 +11,8 @@
         <button class="btn btn-primary btn-sm" @click="doSearch">搜索</button>
       </div>
       <div class="segmented">
-        <button :class="{ active: mode === 'recommend' }" @click="mode = 'recommend'; loadPosts()">智能推荐</button>
-        <button :class="{ active: mode === 'latest' }" @click="mode = 'latest'; loadPosts()">最新</button>
+        <button :class="{ active: mode === 'recommend' }" @click="switchMode('recommend')">智能推荐</button>
+        <button :class="{ active: mode === 'latest' }" @click="switchMode('latest')">最新</button>
       </div>
       <router-link to="/create" class="btn btn-primary">+ 发布帖子</router-link>
     </div>
@@ -132,16 +132,20 @@ function formatTime(t) {
   return `${d.getMonth() + 1}月${d.getDate()}日`
 }
 
+function switchMode(m) {
+  mode.value = m
+  page.value = 1
+  loadPosts()
+}
+
 async function loadPosts() {
   loading.value = true
   try {
     let res
-    if (searchKeyword.value) {
-      res = await listPosts({ keyword: searchKeyword.value, page: page.value, size: size.value })
-    } else if (mode.value === 'recommend') {
-      res = await recommendPosts({ page: page.value, size: size.value })
+    if (mode.value === 'recommend') {
+      res = await recommendPosts({ keyword: searchKeyword.value || undefined, page: page.value, size: size.value })
     } else {
-      res = await listPosts({ page: page.value, size: size.value })
+      res = await listPosts({ keyword: searchKeyword.value || undefined, page: page.value, size: size.value })
     }
     posts.value = res.data.records || []
     total.value = res.data.total || 0
