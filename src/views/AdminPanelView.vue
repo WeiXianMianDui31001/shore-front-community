@@ -636,6 +636,10 @@ onMounted(() => {
   flex-wrap: wrap;
 }
 
+.sub-toolbar > .btn-primary {
+  margin-left: auto;
+}
+
 .pill-bar {
   display: flex;
   gap: var(--space-2);
@@ -645,23 +649,35 @@ onMounted(() => {
 .pill-bar button {
   padding: 6px 14px;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
   border-radius: var(--radius-full);
   cursor: pointer;
   font-size: 13px;
+  font-weight: 500;
   color: var(--text-secondary);
-  transition: all 0.15s;
+  transition: all 0.2s;
+  height: 32px;
 }
 
 .pill-bar button:hover {
-  border-color: var(--border-hover);
-  color: var(--text);
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
 }
 
 .pill-bar button.active {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   color: var(--text-on-primary);
-  border-color: var(--primary);
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.2);
+}
+
+/* data-table grid: 用户 | 邮箱 | 身份 | 积分 | 状态 | 操作 */
+.data-table .table-header,
+.data-table .table-row {
+  grid-template-columns: 2fr 2.5fr 1fr 1fr 1fr 1.5fr;
+  align-items: center;
 }
 
 .admin-list {
@@ -712,15 +728,27 @@ onMounted(() => {
 .item-actions {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: stretch;
   gap: var(--space-2);
-  min-width: 80px;
+  min-width: 90px;
+  flex-shrink: 0;
+}
+
+.item-actions .btn {
+  width: 100%;
 }
 
 .cell-user {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  min-width: 0;
+}
+
+.cell-user > :last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .user-avatar-sm {
@@ -728,13 +756,14 @@ onMounted(() => {
   height: 28px;
   border-radius: var(--radius-full);
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .user-avatar-sm.placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   color: var(--text-on-primary);
   font-size: 12px;
   font-weight: 600;
@@ -743,5 +772,6 @@ onMounted(() => {
 .cell-actions {
   display: flex;
   gap: var(--space-2);
+  flex-wrap: wrap;
 }
 </style>

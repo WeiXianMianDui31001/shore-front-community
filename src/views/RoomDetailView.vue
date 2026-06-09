@@ -2,7 +2,7 @@
   <div class="room-detail">
     <header class="room-header-bar">
       <button class="btn btn-secondary btn-sm" @click="goBack">
-        <span style="margin-right:4px">&#8592;</span> 返回大厅
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><polyline points="15 18 9 12 15 6"/></svg> 返回大厅
       </button>
       <h3>{{ roomName }}</h3>
       <span class="status-badge" :class="wsStatus === 'connected' ? 'badge-success' : wsStatus === 'connecting' ? 'badge-warning' : 'badge-danger'">

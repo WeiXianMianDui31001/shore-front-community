@@ -125,25 +125,28 @@ onMounted(async () => {
 }
 
 .category-bar button {
-  padding: 6px 14px;
+  height: 36px;
+  padding: 0 16px;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
   border-radius: var(--radius-full);
   cursor: pointer;
   font-size: 13px;
+  font-weight: 500;
   color: var(--text-secondary);
-  transition: all 0.15s;
+  transition: all 0.2s;
 }
 
 .category-bar button:hover {
-  border-color: var(--border-hover);
-  color: var(--text);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 .category-bar button.active {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   color: var(--text-on-primary);
-  border-color: var(--primary);
+  border-color: transparent;
 }
 
 .resource-list {

@@ -31,10 +31,11 @@
         <div class="form-row">
           <div class="field">
             <label>身份</label>
-            <select v-model="form.role">
+            <select v-if="!userStore.isAdmin" v-model="form.role">
               <option :value="0">备考用户</option>
               <option :value="1">求职用户</option>
             </select>
+            <input v-else :value="roleText(form.role)" disabled />
           </div>
           <div class="field">
             <label>当前积分</label>
@@ -105,12 +106,16 @@ async function handleAvatarChange(e) {
 async function saveProfile() {
   saving.value = true
   try {
-    await updateProfile({
+    const payload = {
       nickname: form.value.nickname,
       avatarUrl: form.value.avatarUrl,
-      role: form.value.role
-    })
-    const updated = { ...userStore.userInfo, nickname: form.value.nickname, avatarUrl: form.value.avatarUrl, role: form.value.role }
+    }
+    // 管理员不允许修改身份
+    if (!userStore.isAdmin) {
+      payload.role = form.value.role
+    }
+    await updateProfile(payload)
+    const updated = { ...userStore.userInfo, ...payload }
     userStore.setUserInfo(updated)
     alert('保存成功')
   } catch (e) {

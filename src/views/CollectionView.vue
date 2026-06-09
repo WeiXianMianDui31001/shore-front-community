@@ -158,6 +158,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.segmented {
+  margin-bottom: var(--space-5);
+}
+
 .posts, .resources {
   display: flex;
   flex-direction: column;

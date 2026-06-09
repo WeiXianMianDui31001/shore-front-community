@@ -1,7 +1,7 @@
 <template>
   <div class="page-container info-detail-page">
     <button class="btn btn-ghost btn-sm" style="margin-bottom:var(--space-4)" @click="router.back()">
-      <span style="margin-right:4px">&#8592;</span> 返回
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><polyline points="15 18 9 12 15 6"/></svg> 返回
     </button>
 
     <div v-if="loading" class="loading">加载中...</div>
@@ -31,7 +31,7 @@
           <h3 class="block-title">信息来源</h3>
           <a v-if="info.sourceUrl" :href="info.sourceUrl" target="_blank" class="source-link">
             <span class="link-text">{{ info.sourceUrl }}</span>
-            <span>&#8599;</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </a>
           <p v-else style="color:var(--text-muted);font-size:14px">暂无来源链接</p>
         </div>

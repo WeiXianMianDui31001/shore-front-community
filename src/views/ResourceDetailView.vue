@@ -1,7 +1,7 @@
 <template>
   <div class="page-container resource-detail-page">
     <button class="btn btn-ghost btn-sm" style="margin-bottom:var(--space-4)" @click="router.back()">
-      <span style="margin-right:4px">&#8592;</span> 返回
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><polyline points="15 18 9 12 15 6"/></svg> 返回
     </button>
 
     <div v-if="loading" class="loading">加载中...</div>

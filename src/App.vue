@@ -1,9 +1,12 @@
 <template>
-  <div class="app-layout">
+  <div class="app-layout" :style="{ '--mx': mx, '--my': my }">
     <!-- Sidebar -->
     <aside v-if="showSidebar" class="sidebar">
       <div class="sidebar-brand">
-        <span class="brand-icon">&#9670;</span>
+        <svg class="brand-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2l7 7-7 7-7-7z"/>
+          <path d="M12 9l7 7-7 7-7-7z" opacity="0.35"/>
+        </svg>
         <span class="brand-text">岸上见</span>
       </div>
 
@@ -11,19 +14,19 @@
         <div class="nav-section">
           <span class="nav-section-title">发现</span>
           <router-link to="/" class="nav-item" :class="{ active: route.path === '/' }">
-            <span class="nav-icon">&#128172;</span>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             <span>帖子广场</span>
           </router-link>
           <router-link to="/resources" class="nav-item" :class="{ active: route.path.startsWith('/resources') }">
-            <span class="nav-icon">&#128230;</span>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
             <span>资源大厅</span>
           </router-link>
           <router-link to="/info" class="nav-item" :class="{ active: route.path.startsWith('/info') }">
-            <span class="nav-icon">&#128221;</span>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             <span>信息聚合</span>
           </router-link>
           <router-link to="/rooms" class="nav-item" :class="{ active: route.path.startsWith('/room') }">
-            <span class="nav-icon">&#127969;</span>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             <span>讨论室</span>
           </router-link>
         </div>
@@ -31,24 +34,24 @@
         <div v-if="userStore.isLoggedIn" class="nav-section">
           <span class="nav-section-title">我的</span>
           <router-link to="/points" class="nav-item" :class="{ active: route.path === '/points' }">
-            <span class="nav-icon">&#127941;</span>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
             <span>我的积分</span>
           </router-link>
           <router-link to="/collections" class="nav-item" :class="{ active: route.path === '/collections' }">
-            <span class="nav-icon">&#11088;</span>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             <span>我的收藏</span>
           </router-link>
           <router-link to="/my-uploads" class="nav-item" :class="{ active: route.path === '/my-uploads' }">
-            <span class="nav-icon">&#128194;</span>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
             <span>我的上传</span>
           </router-link>
           <router-link to="/notifications" class="nav-item" :class="{ active: route.path === '/notifications' }">
-            <span class="nav-icon">&#128276;</span>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
             <span>消息中心</span>
             <span v-if="unreadCount > 0" class="nav-badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
           </router-link>
           <router-link to="/resume/templates" class="nav-item" :class="{ active: route.path.startsWith('/resume') }">
-            <span class="nav-icon">&#128196;</span>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             <span>简历模板</span>
           </router-link>
         </div>
@@ -56,7 +59,7 @@
         <div v-if="userStore.isAdmin" class="nav-section">
           <span class="nav-section-title">管理</span>
           <router-link to="/admin" class="nav-item" :class="{ active: route.path === '/admin' }">
-            <span class="nav-icon">&#9881;</span>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             <span>管理后台</span>
           </router-link>
         </div>
@@ -72,13 +75,17 @@
           </div>
         </div>
         <button class="logout-btn" @click.stop="logout">
-          <span>&#10148;</span> 退出
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          退出
         </button>
       </div>
     </aside>
 
     <!-- Main Area -->
     <div class="main-area" :class="{ 'no-sidebar': !showSidebar }">
+      <div class="ambient-orb ambient-a" />
+      <div class="ambient-orb ambient-b" />
+      <div class="ambient-orb ambient-c" />
       <router-view />
     </div>
   </div>
@@ -88,6 +95,16 @@
 import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from './stores/user'
+
+/* ---- 鼠标视差 ---- */
+const mx = ref(0)
+const my = ref(0)
+function onMouseMove(e) {
+  mx.value = ((e.clientX / window.innerWidth) - 0.5) * 80
+  my.value = ((e.clientY / window.innerHeight) - 0.5) * 60
+}
+onMounted(() => window.addEventListener('mousemove', onMouseMove))
+onUnmounted(() => window.removeEventListener('mousemove', onMouseMove))
 import { getUnreadCount } from './api/notification'
 
 const userStore = useUserStore()
@@ -142,12 +159,16 @@ function logout() {
 <style>
 /* ========== CSS Variables ========== */
 :root {
-  /* Colors */
+  /* Colors — refined palette */
   --primary: #6366f1;
   --primary-hover: #4f46e5;
   --primary-light: #eef2ff;
-  --bg: #f8fafc;
+  --primary-glow: rgba(99, 102, 241, 0.15);
+  --accent: #8b5cf6;
+  --bg: #f1f5f9;
+  --bg-glass: rgba(248, 250, 252, 0.72);
   --surface: #ffffff;
+  --surface-glass: rgba(255, 255, 255, 0.78);
   --surface-hover: #f8fafc;
   --border: #e2e8f0;
   --border-hover: #cbd5e1;
@@ -173,18 +194,43 @@ function logout() {
 
   /* Radius */
   --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.05);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+  /* Shadows — deeper, more layered */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-glow: 0 0 20px var(--primary-glow);
 
   /* Sidebar */
   --sidebar-width: 220px;
+}
+
+/* ========== Keyframe Animations ========== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes bgFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25%      { transform: translate(1%, 0.5%) scale(1.005); }
+  50%      { transform: translate(0.5%, -0.3%) scale(1.008); }
+  75%      { transform: translate(-0.3%, 0.8%) scale(1.004); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 8px var(--primary-glow); }
+  50%      { box-shadow: 0 0 24px rgba(99,102,241,0.25); }
 }
 
 /* ========== Global Reset ========== */
@@ -202,16 +248,48 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Full-page animated background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -12%;
+  z-index: 0;
+  background: url('/pic/bg.png') no-repeat center center / cover;
+  opacity: 0.14;
+  animation: bgFloat 30s ease-in-out infinite;
+  pointer-events: none;
+  transform: translate(calc(var(--mx, 0) * 1px), calc(var(--my, 0) * 1px)) scale(1.1);
+  transition: transform 0.4s cubic-bezier(0.33, 0.66, 0.55, 0.99);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(99,102,241,0.04) 0%, transparent 55%),
+    radial-gradient(ellipse at 70% 60%, rgba(139,92,246,0.03) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 90%, rgba(6,182,212,0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
 /* ========== Layout ========== */
 .app-layout {
   display: flex;
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
+/* Glassmorphism sidebar */
+/* Fluent Acrylic: 侧边栏 — 深度亚克力 */
 .sidebar {
   width: var(--sidebar-width);
-  background: var(--surface);
-  border-right: 1px solid var(--border);
+  background: rgba(248,250,252,0.4);
+  backdrop-filter: blur(28px) saturate(170%);
+  -webkit-backdrop-filter: blur(28px) saturate(170%);
+  border-right: 1px solid rgba(255,255,255,0.5);
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -219,6 +297,7 @@ body {
   left: 0;
   bottom: 0;
   z-index: 100;
+  box-shadow: 1px 0 0 rgba(0,0,0,0.03), 4px 0 20px rgba(0,0,0,0.03);
 }
 
 .sidebar-brand {
@@ -232,9 +311,10 @@ body {
   letter-spacing: -0.3px;
 }
 
-.brand-icon {
+.brand-icon-svg {
   color: var(--primary);
-  font-size: 16px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 6px rgba(99,102,241,0.35));
 }
 
 .sidebar-nav {
@@ -252,7 +332,7 @@ body {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   color: var(--text-muted);
   padding: 0 var(--space-3);
   margin-bottom: var(--space-2);
@@ -268,26 +348,33 @@ body {
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   margin-bottom: 2px;
   position: relative;
 }
 
 .nav-item:hover {
-  background: var(--bg);
+  background: rgba(99, 102, 241, 0.06);
   color: var(--text);
+  transform: translateX(2px);
 }
 
 .nav-item.active {
-  background: var(--primary-light);
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(8px);
   color: var(--primary);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), inset 0 0 0 1px rgba(99,102,241,0.08);
 }
 
-.nav-icon {
-  font-size: 16px;
+.nav-icon-svg {
   width: 20px;
   text-align: center;
   flex-shrink: 0;
+  transition: transform 0.2s;
+}
+.nav-item:hover .nav-icon-svg {
+  transform: translateX(1px);
 }
 
 .nav-badge {
@@ -298,11 +385,12 @@ body {
   font-weight: 600;
   padding: 1px 6px;
   border-radius: var(--radius-full);
+  animation: glowPulse 2s ease-in-out infinite;
 }
 
 .sidebar-footer {
   padding: var(--space-4);
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(226, 232, 240, 0.5);
 }
 
 .user-card {
@@ -312,28 +400,29 @@ body {
   padding: var(--space-3);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all 0.2s;
 }
 
 .user-card:hover {
-  background: var(--bg);
+  background: rgba(99, 102, 241, 0.06);
 }
 
 .user-avatar {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: var(--radius-full);
   object-fit: cover;
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 .user-avatar.avatar-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   color: var(--text-on-primary);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -374,7 +463,7 @@ body {
   font-size: 13px;
   cursor: pointer;
   border-radius: var(--radius-md);
-  transition: all 0.15s;
+  transition: all 0.2s;
 }
 
 .logout-btn:hover {
@@ -386,17 +475,63 @@ body {
   flex: 1;
   margin-left: var(--sidebar-width);
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
 }
 
 .main-area.no-sidebar {
   margin-left: 0;
 }
 
+/* ---- Fluent Design 环境微动光球 ---- */
+.ambient-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+  will-change: transform;
+}
+.ambient-a {
+  width: 500px; height: 500px;
+  top: -10%; right: -5%;
+  background: rgba(99,102,241,0.06);
+  animation: ambientDriftA 18s ease-in-out infinite;
+}
+.ambient-b {
+  width: 400px; height: 400px;
+  bottom: -8%; left: -3%;
+  background: rgba(139,92,246,0.05);
+  animation: ambientDriftB 22s ease-in-out infinite;
+}
+.ambient-c {
+  width: 300px; height: 300px;
+  top: 50%; left: 60%;
+  background: rgba(6,182,212,0.04);
+  animation: ambientDriftC 20s ease-in-out infinite;
+}
+@keyframes ambientDriftA {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(60px, -40px); }
+  66% { transform: translate(-30px, 30px); }
+}
+@keyframes ambientDriftB {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(-50px, -30px); }
+  66% { transform: translate(40px, 20px); }
+}
+@keyframes ambientDriftC {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-40px, -50px); }
+}
+
 /* ========== Utility Classes ========== */
 .page-container {
-  max-width: 1000px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: var(--space-8) var(--space-6);
+  animation: fadeUp 0.5s ease;
 }
 
 .page-header {
@@ -404,10 +539,10 @@ body {
 }
 
 .page-header h1, .page-header h2 {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
   color: var(--text);
-  letter-spacing: -0.3px;
+  letter-spacing: -0.4px;
   line-height: 1.3;
 }
 
@@ -417,13 +552,45 @@ body {
   margin-top: var(--space-1);
 }
 
-/* Toolbar */
+/* Toolbar — unified alignment */
 .toolbar {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-5);
+  row-gap: var(--space-3);
   margin-bottom: var(--space-5);
   flex-wrap: wrap;
+}
+
+.toolbar .category-bar,
+.toolbar .segmented {
+  margin-left: 0;
+}
+
+.toolbar > .btn-primary {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* 工具栏内所有子元素统一 36px 高度 + 清除自带 margin */
+.toolbar .category-bar {
+  margin-bottom: 0;
+}
+
+.toolbar .category-bar button {
+  height: 34px;
+}
+
+.toolbar .segmented {
+  margin-bottom: 0;
+}
+
+.toolbar .segmented button {
+  height: 28px;
+}
+
+.toolbar .search-box {
+  margin-bottom: 0;
 }
 
 /* Search */
@@ -431,66 +598,83 @@ body {
   display: flex;
   align-items: center;
   flex: 1;
-  min-width: 240px;
-  max-width: 400px;
+  min-width: 180px;
+  max-width: 300px;
   gap: var(--space-2);
+}
+
+.search-box .btn {
+  height: 36px;
+  flex-shrink: 0;
 }
 
 .search-box input {
   flex: 1;
-  padding: var(--space-2) var(--space-3);
+  height: 36px;
+  padding: 0 var(--space-3);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   font-size: 14px;
   outline: none;
-  background: var(--surface);
-  transition: all 0.15s;
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s;
 }
 
 .search-box input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-light);
+  box-shadow: 0 0 0 3px var(--primary-glow);
 }
 
 .search-box input::placeholder {
   color: var(--text-muted);
 }
 
-/* Buttons */
+/* Buttons — refined */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
+  height: 36px;
+  padding: 0 var(--space-4);
   border: 1px solid transparent;
   border-radius: var(--radius-md);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   text-decoration: none;
   white-space: nowrap;
+  letter-spacing: 0.1px;
 }
 
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
 .btn-primary {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   color: var(--text-on-primary);
-  border-color: var(--primary);
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.25);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--primary-hover);
-  border-color: var(--primary-hover);
+  background: linear-gradient(135deg, var(--primary-hover), #4338ca);
+  box-shadow: 0 4px 16px rgba(99,102,241,0.35);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(99,102,241,0.2);
 }
 
 .btn-secondary {
-  background: var(--surface);
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
   color: var(--text-secondary);
   border-color: var(--border);
 }
@@ -498,6 +682,7 @@ body {
 .btn-secondary:hover:not(:disabled) {
   background: var(--bg);
   border-color: var(--border-hover);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-ghost {
@@ -507,7 +692,7 @@ body {
 }
 
 .btn-ghost:hover:not(:disabled) {
-  background: var(--bg);
+  background: rgba(99,102,241,0.06);
   color: var(--text);
 }
 
@@ -522,52 +707,107 @@ body {
   color: var(--text-on-primary);
 }
 
-.btn-sm { padding: 4px 10px; font-size: 13px; }
-.btn-lg { padding: 10px 20px; font-size: 15px; }
+.btn-sm { height: 30px; padding: 0 10px; font-size: 13px; }
+.btn-lg { height: 42px; padding: 0 22px; font-size: 15px; }
 
-/* Filter tabs / Segmented control */
+.search-box .btn-sm,
+.search-box .btn { height: 36px; }
+
+/* Filter tabs / Segmented control — polished pill style */
 .filter-tabs, .segmented {
-  display: flex;
+  display: inline-flex;
   gap: 2px;
-  padding: 2px;
-  background: var(--bg);
+  padding: 3px;
+  background: rgba(241,245,249,0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.5);
+  border-bottom-color: rgba(226,232,240,0.3);
   border-radius: var(--radius-md);
+  flex-shrink: 0;
 }
 
 .filter-tabs button, .segmented button {
-  padding: var(--space-2) var(--space-3);
+  padding: 5px 14px;
   border: none;
   background: transparent;
-  border-radius: var(--radius-sm);
+  border-radius: calc(var(--radius-md) - 2px);
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-muted);
-  transition: all 0.15s;
+  transition: all 0.3s cubic-bezier(0.33, 0.66, 0.55, 0.99);
+  height: 30px;
+  white-space: nowrap;
 }
 
 .filter-tabs button:hover, .segmented button:hover {
   color: var(--text-secondary);
+  background: rgba(255,255,255,0.45);
 }
 
 .filter-tabs button.active, .segmented button.active {
-  background: var(--surface);
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(6px);
   color: var(--text);
-  box-shadow: var(--shadow-sm);
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
 }
 
-/* Cards */
-.card {
-  background: var(--surface);
+/* Category bar — unified pill style */
+.category-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.category-bar button {
+  padding: 5px 14px;
   border: 1px solid var(--border);
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  height: 30px;
+  white-space: nowrap;
+}
+
+.category-bar button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.category-bar button.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: var(--text-on-primary);
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.2);
+}
+
+/* Cards — glassmorphism */
+/* Fluent Acrylic: 卡片 — 中层亚克力 + 微呼吸 */
+.card {
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid rgba(255,255,255,0.55);
+  border-bottom-color: rgba(226,232,240,0.35);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
-  transition: all 0.2s ease;
+  transition: all 0.35s cubic-bezier(0.33, 0.66, 0.55, 0.99);
 }
 
 .card-hover:hover {
-  border-color: var(--border-hover);
-  box-shadow: var(--shadow-md);
+  border-color: rgba(255,255,255,0.7);
+  box-shadow:
+    0 8px 32px rgba(99,102,241,0.06),
+    0 2px 8px rgba(0,0,0,0.04);
+  transform: translateY(-2px);
 }
 
 .card-clickable {
@@ -578,18 +818,20 @@ body {
 .input, .field input, .field textarea, .field select {
   width: 100%;
   padding: 10px 14px;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(226,232,240,0.6);
+  border-bottom-color: rgba(226,232,240,0.4);
   border-radius: var(--radius-md);
   font-size: 14px;
   outline: none;
-  background: var(--surface);
-  transition: all 0.15s;
+  background: rgba(248,250,252,0.55);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.33, 0.66, 0.55, 0.99);
   font-family: inherit;
 }
 
 .input:focus, .field input:focus, .field textarea:focus, .field select:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-light);
+  box-shadow: 0 0 0 3px var(--primary-glow);
 }
 
 .input::placeholder, .field input::placeholder, .field textarea::placeholder {
@@ -608,13 +850,24 @@ body {
   margin-bottom: var(--space-2);
 }
 
+.form-row {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.form-row .field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
 /* Tags / Badges */
 .tag {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   padding: 3px 10px;
-  background: var(--bg);
+  background: var(--bg-glass);
+  backdrop-filter: blur(4px);
   color: var(--text-secondary);
   border-radius: var(--radius-sm);
   font-size: 12px;
@@ -638,10 +891,14 @@ body {
 
 /* Tables */
 .data-table {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255,255,255,0.5);
+  border-bottom-color: rgba(226,232,240,0.3);
   border-radius: var(--radius-lg);
   overflow: hidden;
+  box-shadow: 0 2px 16px rgba(99,102,241,0.03);
 }
 
 .data-table .table-header, .data-table .table-row {
@@ -652,7 +909,7 @@ body {
 }
 
 .data-table .table-header {
-  background: var(--bg);
+  background: rgba(241, 245, 249, 0.6);
   font-weight: 600;
   font-size: 13px;
   color: var(--text-muted);
@@ -661,14 +918,14 @@ body {
 }
 
 .data-table .table-row {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(226, 232, 240, 0.4);
   font-size: 14px;
   color: var(--text-secondary);
-  transition: background 0.15s;
+  transition: background 0.2s;
 }
 
 .data-table .table-row:hover {
-  background: var(--bg);
+  background: rgba(99, 102, 241, 0.04);
 }
 
 /* Pagination */
@@ -681,19 +938,22 @@ body {
 }
 
 .pagination button {
-  padding: var(--space-2) var(--space-4);
+  height: 34px;
+  padding: 0 var(--space-4);
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
   border-radius: var(--radius-md);
   cursor: pointer;
   font-size: 14px;
   color: var(--text-secondary);
-  transition: all 0.15s;
+  transition: all 0.2s;
 }
 
 .pagination button:hover:not(:disabled) {
-  border-color: var(--border-hover);
-  background: var(--bg);
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 2px 8px rgba(99,102,241,0.1);
 }
 
 .pagination button:disabled {
@@ -715,25 +975,47 @@ body {
   font-size: 14px;
 }
 
-/* Modal */
+.loading {
+  position: relative;
+}
+.loading::after {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 3px;
+  margin: 16px auto 0;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  background-size: 200% 100%;
+  border-radius: 2px;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Modal — glassmorphism */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 200;
   padding: var(--space-5);
+  animation: fadeIn 0.2s ease;
 }
 
 .modal-card {
-  background: var(--surface);
+  background: rgba(248,250,252,0.42);
+  backdrop-filter: blur(28px) saturate(170%);
+  -webkit-backdrop-filter: blur(28px) saturate(170%);
+  border: 1px solid rgba(255,255,255,0.55);
+  border-bottom-color: rgba(226,232,240,0.3);
   border-radius: var(--radius-lg);
   padding: var(--space-6);
   width: 100%;
   max-width: 400px;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 16px 48px rgba(99,102,241,0.06), 0 4px 12px rgba(0,0,0,0.05);
+  animation: fadeUp 0.35s cubic-bezier(0.33, 0.66, 0.55, 0.99);
 }
 
 .modal-card.wide {

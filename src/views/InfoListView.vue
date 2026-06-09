@@ -5,12 +5,11 @@
       <p class="page-desc">考研院校信息、求职招聘资讯，一站聚合</p>
     </div>
 
-    <div class="segmented">
-      <button :class="{ active: scene === 0 }" @click="switchScene(0)">考研</button>
-      <button :class="{ active: scene === 1 }" @click="switchScene(1)">求职</button>
-    </div>
-
     <div class="toolbar">
+      <div class="segmented">
+        <button :class="{ active: scene === 0 }" @click="switchScene(0)">考研</button>
+        <button :class="{ active: scene === 1 }" @click="switchScene(1)">求职</button>
+      </div>
       <div class="search-box">
         <input v-model="keyword" placeholder="搜索标题关键词..." @keyup.enter="doSearch" />
         <button class="btn btn-primary btn-sm" @click="doSearch">搜索</button>
@@ -36,7 +35,7 @@
             <span v-if="item.updateTime" class="meta-muted">{{ formatDate(item.updateTime) }}</span>
           </div>
         </div>
-        <span class="arrow">&#8250;</span>
+        <span class="arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
       </div>
     </div>
 
@@ -126,10 +125,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.segmented {
-  margin-bottom: var(--space-4);
-}
-
 .category-bar {
   display: flex;
   gap: var(--space-2);
@@ -138,25 +133,28 @@ onMounted(() => {
 }
 
 .category-bar button {
-  padding: 6px 14px;
+  height: 36px;
+  padding: 0 16px;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
   border-radius: var(--radius-full);
   cursor: pointer;
   font-size: 13px;
+  font-weight: 500;
   color: var(--text-secondary);
-  transition: all 0.15s;
+  transition: all 0.2s;
 }
 
 .category-bar button:hover {
-  border-color: var(--border-hover);
-  color: var(--text);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 .category-bar button.active {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   color: var(--text-on-primary);
-  border-color: var(--primary);
+  border-color: transparent;
 }
 
 .info-list {
@@ -202,14 +200,16 @@ onMounted(() => {
 }
 
 .arrow {
-  font-size: 20px;
+  display: flex;
+  align-items: center;
   color: var(--text-muted);
   margin-left: var(--space-4);
   flex-shrink: 0;
-  transition: color 0.15s;
+  transition: all 0.2s;
 }
 
 .info-card:hover .arrow {
   color: var(--primary);
+  transform: translateX(3px);
 }
 </style>
