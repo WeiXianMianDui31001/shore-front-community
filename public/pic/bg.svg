@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" opacity="0.18">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+    <linearGradient id="g4" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Large blob top-right -->
+  <circle cx="1200" cy="100" r="350" fill="url(#g1)" opacity="0.25"/>
+  <!-- Large blob bottom-left -->
+  <circle cx="150" cy="750" r="300" fill="url(#g2)" opacity="0.2"/>
+  <!-- Medium blob middle -->
+  <circle cx="800" cy="500" r="250" fill="url(#g3)" opacity="0.15"/>
+  <!-- Small accent blobs -->
+  <circle cx="500" cy="200" r="120" fill="url(#g1)" opacity="0.12"/>
+  <circle cx="1100" cy="700" r="180" fill="url(#g2)" opacity="0.12"/>
+  <circle cx="350" cy="550" r="100" fill="url(#g3)" opacity="0.1"/>
+  <!-- Subtle grid lines -->
+  <g stroke="#6366f1" stroke-width="0.5" opacity="0.04">
+    <line x1="0" y1="300" x2="1440" y2="300"/>
+    <line x1="0" y1="600" x2="1440" y2="600"/>
+    <line x1="480" y1="0" x2="480" y2="900"/>
+    <line x1="960" y1="0" x2="960" y2="900"/>
+  </g>
+</svg>

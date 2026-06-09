@@ -38,7 +38,7 @@
         <label>图片</label>
         <div class="upload-zone" @click="fileInput?.click()">
           <input type="file" accept="image/*" multiple @change="handleFileSelect" ref="fileInput" class="file-input" />
-          <span class="upload-icon">&#128247;</span>
+          <span class="upload-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
           <span class="upload-text">点击选择图片，或拖拽到此处</span>
         </div>
         <div v-if="uploading" class="upload-hint">上传中...</div>
