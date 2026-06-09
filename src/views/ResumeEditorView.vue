@@ -126,6 +126,7 @@ import {
   previewResumeHtml,
   startResumeExport,
   getResumeExportStatus,
+  downloadResumeExport,
   uploadResumePhoto,
 } from '../api/resume'
 import { resolvePdfViewUrl } from '../utils/pdfExportUrl'
@@ -364,6 +365,22 @@ async function save() {
   }
 }
 
+async function triggerDownload(exportId) {
+  try {
+    const blob = await downloadResumeExport(exportId)
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'resume.pdf'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    window.URL.revokeObjectURL(url)
+  } catch (e) {
+    console.error('Download failed', e)
+  }
+}
+
 async function exportPdf() {
   if (!resumeId.value) {
     err.value = '请先保存简历后再导出'
@@ -376,11 +393,14 @@ async function exportPdf() {
   try {
     const started = await startResumeExport(resumeId.value)
     const max = 40
+    const exportId = started.exportId
     for (let i = 0; i < max; i++) {
-      const st = await getResumeExportStatus(resumeId.value, started.exportId)
+      const st = await getResumeExportStatus(resumeId.value, exportId)
       if (st.status === 'SUCCESS' && st.pdfUrl) {
         pdfUrl.value = st.pdfUrl
-        hint.value = '导出成功'
+        hint.value = '导出成功，下载即将开始...'
+        // Trigger browser download
+        triggerDownload(exportId)
         break
       }
       if (st.status === 'FAILED') {

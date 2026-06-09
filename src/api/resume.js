@@ -38,6 +38,10 @@ export function getResumeExportStatus(resumeId, exportId) {
   return request.get(`/resume/${resumeId}/export/${exportId}/status`).then((res) => res.data)
 }
 
+export function downloadResumeExport(exportId) {
+  return request.get(`/resume/export/${exportId}/download`, { responseType: 'blob' })
+}
+
 export function uploadResumePhoto(file) {
   const fd = new FormData()
   fd.append('file', file)
