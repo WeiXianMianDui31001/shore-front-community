@@ -64,7 +64,7 @@
         </div>
         <div class="action-group">
           <button class="btn btn-secondary" :class="{ active: resource.collected }" @click="toggleCollect">
-            <span style="margin-right:4px">&#9733;</span> {{ resource.collected ? '已收藏' : '收藏' }}
+            <svg style="margin-right:4px" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> {{ resource.collected ? '已收藏' : '收藏' }}
           </button>
           <button
             class="btn btn-primary btn-lg"
@@ -74,7 +74,7 @@
             <span v-if="downloading">处理中...</span>
             <span v-else-if="resource.status !== 1">资源暂不可下载</span>
             <span v-else-if="resource.pointsCost > myPoints">积分不足</span>
-            <span v-else><span style="margin-right:4px">&#128229;</span> 立即下载</span>
+            <span v-else><svg style="margin-right:4px" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> 立即下载</span>
           </button>
         </div>
       </div>

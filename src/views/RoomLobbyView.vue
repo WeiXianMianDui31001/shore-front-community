@@ -18,7 +18,7 @@
     <div v-else class="room-grid">
       <div v-for="room in rooms" :key="room.id" class="room-card" @click="enterRoom(room)">
         <div class="room-header">
-          <h4>{{ room.name }} <span v-if="room.hasPassword" class="lock">&#128274;</span></h4>
+          <h4>{{ room.name }} <span v-if="room.hasPassword" class="lock"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span></h4>
           <span class="badge" :class="room.onlineCount > 0 ? 'badge-success' : 'badge-neutral'">
             {{ room.onlineCount || 0 }} 人在线
           </span>

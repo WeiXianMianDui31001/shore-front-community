@@ -39,22 +39,33 @@
         <h3 class="post-title">{{ post.title }}</h3>
         <p class="post-excerpt">{{ excerpt(post.content) }}</p>
 
+        <div v-if="post.images" class="post-images" @click.stop>
+          <div class="images-grid" :class="{ single: parseImages(post.images).length === 1 }">
+            <div v-for="(img, i) in parseImages(post.images).slice(0, 4)" :key="i" class="image-thumb">
+              <img :src="img" :alt="'图片' + (i+1)" loading="lazy" />
+              <div v-if="i === 3 && parseImages(post.images).length > 4" class="image-more">
+                +{{ parseImages(post.images).length - 4 }}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div v-if="post.tags" class="tags">
           <span v-for="tag in parseTags(post.tags)" :key="tag" class="tag">{{ tag }}</span>
         </div>
 
         <div class="post-footer">
           <span class="stat">
-            <span class="stat-icon">&#128065;</span> {{ post.viewCount || 0 }}
+            <span class="stat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span> {{ post.viewCount || 0 }}
           </span>
           <span class="stat">
-            <span class="stat-icon">&#9829;</span> {{ post.likeCount || 0 }}
+            <span class="stat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span> {{ post.likeCount || 0 }}
           </span>
           <span class="stat">
-            <span class="stat-icon">&#9733;</span> {{ post.collectCount || 0 }}
+            <span class="stat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span> {{ post.collectCount || 0 }}
           </span>
           <span class="stat">
-            <span class="stat-icon">&#128077;</span> {{ post.endorseCount || 0 }}
+            <span class="stat-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></span> {{ post.endorseCount || 0 }}
           </span>
           <span class="post-time">{{ formatTime(post.createdAt) }}</span>
         </div>
@@ -116,6 +127,14 @@ function roleClass(role) {
 function parseTags(tagsJson) {
   try {
     return JSON.parse(tagsJson)
+  } catch {
+    return []
+  }
+}
+
+function parseImages(imagesJson) {
+  try {
+    return JSON.parse(imagesJson)
   } catch {
     return []
   }
@@ -276,6 +295,56 @@ onMounted(() => {
   font-size: 14px;
   line-height: 1.6;
   margin-bottom: var(--space-3);
+}
+
+/* 帖子图片预览 */
+.post-images {
+  margin-bottom: var(--space-3);
+}
+.images-grid {
+  display: grid;
+  gap: 6px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.images-grid.single {
+  grid-template-columns: 1fr;
+  max-height: 200px;
+}
+.images-grid:not(.single) {
+  grid-template-columns: repeat(3, 1fr);
+  max-height: 180px;
+}
+.images-grid:not(.single):has(:nth-child(2):last-child) {
+  grid-template-columns: repeat(2, 1fr);
+}
+.image-thumb {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  cursor: default;
+}
+.image-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s;
+}
+.image-thumb:hover img {
+  transform: scale(1.05);
+}
+.image-more {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 .tags {

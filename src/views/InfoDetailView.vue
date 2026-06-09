@@ -39,7 +39,7 @@
 
       <div class="detail-footer">
         <button class="btn btn-secondary" :class="{ active: collected }" @click="toggleCollect">
-          <span style="margin-right:4px">&#9733;</span> {{ collected ? '已收藏' : '收藏' }}
+          <svg style="margin-right:4px" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> {{ collected ? '已收藏' : '收藏' }}
         </button>
       </div>
     </div>

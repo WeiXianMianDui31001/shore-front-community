@@ -23,7 +23,7 @@
         <div class="title-row">
           <h1 class="post-title">{{ post.title }}</h1>
           <span v-if="post.isExcellent" class="badge badge-warning">
-            <span style="margin-right:4px">&#9733;</span> 经验帖
+            <svg style="margin-right:4px" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 经验帖
           </span>
         </div>
 
@@ -39,22 +39,22 @@
 
         <div class="actions">
           <button class="action-pill" :class="{ active: post.liked }" @click="toggleLike">
-            <span style="margin-right:4px">&#9829;</span>
+            <svg style="margin-right:4px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             <span>{{ post.liked ? '已赞' : '点赞' }}</span>
             <span style="margin-left:4px;font-weight:600">{{ post.likeCount || 0 }}</span>
           </button>
           <button class="action-pill" :class="{ active: post.collected }" @click="toggleCollect">
-            <span style="margin-right:4px">&#9733;</span>
+            <svg style="margin-right:4px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             <span>{{ post.collected ? '已收藏' : '收藏' }}</span>
             <span style="margin-left:4px;font-weight:600">{{ post.collectCount || 0 }}</span>
           </button>
           <button class="action-pill" :class="{ active: post.endorsed }" @click="toggleEndorse">
-            <span style="margin-right:4px">&#128077;</span>
+            <svg style="margin-right:4px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
             <span>{{ post.endorsed ? '已认可' : '认可' }}</span>
             <span style="margin-left:4px;font-weight:600">{{ post.endorseCount || 0 }}</span>
           </button>
           <span class="view-count">
-            <span style="margin-right:4px">&#128065;</span> {{ post.viewCount || 0 }} 浏览
+            <svg style="margin-right:4px" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> {{ post.viewCount || 0 }} 浏览
           </span>
         </div>
 
@@ -81,7 +81,7 @@
             <div class="composer-left">
               <input type="file" accept="image/*" multiple @change="handleCommentFileSelect" ref="commentFileInput" class="file-input" />
               <button class="btn btn-sm btn-ghost" @click="commentFileInput?.click()">
-                <span style="margin-right:4px">&#128247;</span> 添加图片
+                <svg style="margin-right:4px" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> 添加图片
               </button>
               <span v-if="commentUploading" style="font-size:13px;color:var(--text-muted)">上传中...</span>
             </div>
@@ -90,7 +90,7 @@
           <div v-if="commentImageUrls.length" class="image-preview-bar">
             <div v-for="(img, i) in commentImageUrls" :key="i" class="preview-thumb">
               <img :src="img" />
-              <button class="thumb-remove" @click="removeCommentImage(i)">&#10005;</button>
+              <button class="thumb-remove" @click="removeCommentImage(i)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
           </div>
         </div>
@@ -121,7 +121,7 @@
         </div>
 
         <div v-if="comments.length === 0" class="empty-state">
-          <span style="font-size:32px;display:block;margin-bottom:var(--space-2)">&#128172;</span>
+          <svg style="display:block;margin:0 auto var(--space-2);opacity:0.4" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           <p>暂无评论，来抢沙发吧</p>
         </div>
       </div>
